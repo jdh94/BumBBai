@@ -37,7 +37,7 @@ public class BoardMngController {
 
 	@GetMapping(value = {"/", "/main"})
 	public ModelAndView BoardPage() throws Exception {
-		return new ModelAndView("/manager/boardmng/main.scourt").addObject("test", "test");
+		return new ModelAndView("/main/index.jsp").addObject("test", "test");
 	}
 	
 	@GetMapping(value="/search")
