@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="USER_LOG">
+	<insert id="SET_USER_READ_LOG" parameterType="map">
+		/* 이용자 출력 로그입력 */
+		INSERT INTO USER_READ_LOG_TBL(LOG_KEY,WORKER_IP,WORKER_ID,WORKER_NAME,TRGET_ESNTL_ID,WORK_DATE,WORKER_DO) 
+		VALUES(USERLOG_SEQ.NextVal, #{ip}, #{worker_id}, #{worker_name}, #{esntl_id}, SYSDATE,#{log_info})
+	</insert>	
+	
+	<select id="GET_USER_LOG_LIST_CNT" parameterType="map" resultType="int">
+		SELECT COUNT(1) FROM (
+			SELECT LOG_KEY,WORKER_IP,TRGET_ESNTL_ID,WORK_DATE,WORKER_DO,WORKER_ID,WORKER_NAME,LOG_TYPE
+			FROM (
+				<if test="log_type == 'p'.toString() or log_type =='all'">
+					SELECT LOG_KEY,WORKER_IP,TRGET_ESNTL_ID,WORK_DATE,WORKER_DO,WORKER_ID,WORKER_NAME,'출력' AS LOG_TYPE, '' as CHANGE_COLUMN  FROM USER_PRINT_LOG_TBL 
+					WHERE 1=1
+					<if test="search_txt != null and search_txt != ''.toString()">
+						<choose>
+				            <when test="search_type == 'WORKER_ID'.toString()">
+				            	AND INSTR(WORKER_ID,#{search_txt}) > 0
+				            </when>
+				            <when test="search_type == 'WORKER_NAME'.toString()">
+				                AND INSTR(WORKER_NAME,#{search_txt}) > 0
+				            </when>
+				        </choose>
+					</if>
+					<if test="workStartDate != null and !''.equals(workStartDate) and workEndDate != null and !''.equals(workEndDate)">
+						AND WORK_DATE BETWEEN TO_DATE(#{workStartDate}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{workEndDate}, 'YYYY-MM-DD') + 0.99999
+					</if>
+				</if>
+				<if test="log_type =='all'">
+					UNION
+				</if>
+				<if test="log_type == 'r'.toString() or log_type =='all'">
+					SELECT LOG_KEY,WORKER_IP,TRGET_ESNTL_ID,WORK_DATE,WORKER_DO,WORKER_ID,WORKER_NAME,'조회' AS LOG_TYPE, '' as CHANGE_COLUMN  FROM USER_READ_LOG_TBL 
+					WHERE 1=1
+					<if test="search_txt != null and search_txt != ''.toString()">
+						<choose>
+				            <when test="search_type == 'WORKER_ID'.toString()">
+				            	AND INSTR(WORKER_ID,#{search_txt}) > 0
+				            </when>
+				            <when test="search_type == 'WORKER_NAME'.toString()">
+				                AND INSTR(WORKER_NAME,#{search_txt}) > 0
+				            </when>
+				        </choose>
+					</if>
+					<if test="workStartDate != null and !''.equals(workStartDate) and workEndDate != null and !''.equals(workEndDate)">
+						AND WORK_DATE BETWEEN TO_DATE(#{workStartDate}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{workEndDate}, 'YYYY-MM-DD') + 0.99999
+					</if>
+				</if> 
+				<if test="log_type =='all'">
+					UNION
+				</if>
+				<if test="log_type == 'd'.toString() or log_type =='all'">
+					SELECT LOG_KEY,WORKER_IP,TRGET_ESNTL_ID,WORK_DATE,WORKER_DO,WORKER_ID,WORKER_NAME,'탈퇴' AS LOG_TYPE, '' as CHANGE_COLUMN FROM USER_DEL_LOG_TBL
+					WHERE 1=1
+					<if test="search_txt != null and search_txt != ''.toString()">
+						<choose>
+				            <when test="search_type == 'WORKER_ID'.toString()">
+				            	AND INSTR(WORKER_ID,#{search_txt}) > 0
+				            </when>
+				            <when test="search_type == 'WORKER_NAME'.toString()">
+				                AND INSTR(WORKER_NAME,#{search_txt}) > 0
+				            </when>
+				        </choose>
+					</if>
+					<if test="workStartDate != null and !''.equals(workStartDate) and workEndDate != null and !''.equals(workEndDate)">
+						AND WORK_DATE BETWEEN TO_DATE(#{workStartDate}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{workEndDate}, 'YYYY-MM-DD') + 0.99999
+					</if>
+				</if>
+				<if test="log_type =='all'">
+					UNION
+				</if>
+				<if test="log_type == 'u'.toString() or log_type =='all'">
+					SELECT LOG_KEY,WORKER_IP,TRGET_ESNTL_ID,WORK_DATE,WORKER_DO,WORKER_ID,WORKER_NAME,'수정' AS LOG_TYPE, CHANGE_COLUMN FROM USER_UPDATE_LOG_TBL
+					WHERE 1=1
+					<if test="search_txt != null and search_txt != ''.toString()">
+						<choose>
+				            <when test="search_type == 'WORKER_ID'.toString()">
+				            	AND INSTR(WORKER_ID,#{search_txt}) > 0
+				            </when>
+				            <when test="search_type == 'WORKER_NAME'.toString()">
+				                AND INSTR(WORKER_NAME,#{search_txt}) > 0
+				            </when>
+				        </choose>
+					</if>
+					<if test="workStartDate != null and !''.equals(workStartDate) and workEndDate != null and !''.equals(workEndDate)">
+						AND WORK_DATE BETWEEN TO_DATE(#{workStartDate}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{workEndDate}, 'YYYY-MM-DD') + 0.99999
+					</if>
+				</if>
+			) LOG
+		)
+	</select>
+	
+		
+	<insert id="SET_USER_UPDATE_LOG" parameterType="map">
+		/* 이용자 수정 로그입력 */
+		INSERT INTO USER_UPDATE_LOG_TBL(LOG_KEY,WORKER_IP,WORKER_ID,WORKER_NAME,TRGET_ESNTL_ID,WORK_DATE,WORKER_DO,PREV_DATA,NEW_DATA,CHANGE_COLUMN ) 
+		VALUES(USERLOG_SEQ.NextVal, #{ip}, #{worker_id,jdbcType=VARCHAR}, #{worker_name,jdbcType=VARCHAR}, #{esntlId}, SYSDATE,#{log_info},PKG_CRYPTO.ENCRYPT(#{prevData,jdbcType=VARCHAR}),PKG_CRYPTO.ENCRYPT(#{newData,jdbcType=VARCHAR}),#{changeId,jdbcType=VARCHAR})
+	</insert>
+	<select id="GET_USER_UPDATE_LOG_DETAIL" parameterType="map" resultType="map">
+		SELECT 
+		NVL(PKG_CRYPTO.DECRYPT(PREV_DATA),' ') AS PREV_DATA,
+  		NVL(PKG_CRYPTO.DECRYPT(NEW_DATA),' ')       AS NEW_DATA,
+  		CHANGE_COLUMN FROM USER_UPDATE_LOG_TBL WHERE LOG_KEY = #{log_key}
+	</select>
+	
+</mapper>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BOARD_MNG">
+
+    <resultMap type="HashMap" id="tmptContentMap">
+        <result property="CONTENT" column="CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="TMPT_FUNC" column="TMPT_FUNC" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="TMPT_COMMENT" column="TMPT_COMMENT" jdbcType="CLOB" javaType="java.lang.String" />
+    </resultMap>
+
+	<update id="UPDATE_NOTICE_BOARD" parameterType="string">
+		/* 공지사항 수정 */
+		UPDATE
+		NOTICE_BOARD
+		SET
+		TITLE = #{title},
+		CONTENT = #{content_html},
+		WORKER_ID = #{worker_id},
+		LAST_UPDATE_DATE = sysdate,
+		TOP_YN = #{top_yn},
+		REG_DATE = TO_DATE(#{reg_date}, 'YYYY-MM-DD')
+
+		WHERE
+		ID = #{noticeId}
+	</update>
+
+
+
+	<select id="GET_NOTICE_BOARD_LIST" parameterType="hashmap" resultType="hashmap" >
+        /* 공지사항 리스트조회 */
+		SELECT 
+			Y.RNUM,
+			Y.ID,
+			Y.TITLE,
+			Y.TOP_YN,
+			Y.CONTENT_TYPE,
+			Y.HITS_COUNT,
+			TO_CHAR(Y.REG_DATE, 'YYYY-MM-DD') REG_DATE,
+			TO_CHAR(Y.LAST_UPDATE_DATE, 'YYYY-MM-DD') LAST_UPDATE_DATE,
+			Y.WORKER_ID,
+			Y.NB_ID
+		FROM(
+		        SELECT 
+		            ROWNUM as RNUM,
+		            X.*
+		        FROM
+		            (
+		                SELECT 
+		                    Z.*
+		                FROM(
+		                        SELECT
+		                            NB.ID,
+		                            NB.TITLE,
+		                            NB.TOP_YN,
+		                            nb.content,
+		                            nb.content_type,
+		                            nb.hits_count,
+		                            nb.reg_date,
+		                            nb.last_update_date,
+		                            nb.worker_id,
+		                            af.nb_id
+		                        FROM
+		                            notice_board nb left join attachment_id af 
+		                            on nb.id = af.nb_id
+							) Z
+		                   <include refid="search_query" />
+		                ORDER BY DECODE(TOP_YN, 'Y', 0, 1), ID DESC 
+		            ) X    
+		        WHERE ROWNUM <![CDATA[<=]]> #{currpage} * #{displaycnt}
+		    ) Y
+		WHERE RNUM  <![CDATA[>]]> (#{currpage} - 1 ) * #{displaycnt}
+	</select>
+
+
+   <select id="GET_NOTICE_BOARD_LIST_EXCEL" parameterType="hashmap" resultType="hashmap" >
+        /* 공지사항 엑셀 출력 */
+		SELECT 
+			Y.RNUM,
+			Y.TITLE,
+			TO_CHAR(Y.REG_DATE, 'YYYY-MM-DD') REG_DATE,
+			(CASE WHEN Y.NB_ID IS NULL THEN 'N' ELSE 'Y' END) AS FILE_YN,
+			Y.HITS_COUNT
+		FROM(
+		        SELECT 
+		            ROWNUM as RNUM,
+		            X.*
+		        FROM
+		            (
+		                SELECT 
+		                    Z.*
+		                FROM(
+		                        SELECT
+		                            NB.ID,
+		                            NB.TITLE,
+		                            NB.TOP_YN,
+		                            nb.content,
+		                            nb.content_type,
+		                            nb.hits_count,
+		                            nb.reg_date,
+		                            nb.last_update_date,
+		                            nb.worker_id,
+		                            af.nb_id
+		                        FROM
+		                            notice_board nb left join attachment_id af 
+		                            on nb.id = af.nb_id
+							) Z
+		                   <include refid="search_query" />
+		                ORDER BY DECODE(TOP_YN, 'Y', 0, 1), ID DESC 
+		            ) X    
+		    ) Y
+	</select>
+
+        
+    <select id="GET_NOTICE_BOARD_COUNT" parameterType="hashmap" resultType="int" >
+        /* 공지사항 리스트 카운트조회 */
+        SELECT 
+        	COUNT(1) 
+       	FROM 
+        	NOTICE_BOARD
+       	<include refid = "search_query" />
+	</select>
+	
+	<insert id="ADD_NOTICE_BOARD" parameterType="map">
+        /* 공지사항 입력 */
+	    <selectKey keyProperty="clivSeq" resultType="int" order="BEFORE">
+			SELECT CLIV_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+        INSERT INTO NOTICE_BOARD(
+        	ID,
+        	TITLE, 
+        	CONTENT, 
+        	REG_DATE,
+        	WORKER_ID,
+        	CONTENT_TYPE,
+        	TOP_YN
+        )
+        VALUES (
+        	#{clivSeq, jdbcType=INTEGER},
+	        #{title},
+	        #{content_html},
+	        sysdate,
+	        #{worker_id},
+	        #{content_type},
+	        #{top_yn}
+	    )
+	</insert>
+	
+    <select id="GET_NOTICE_BOARD_INFO" parameterType="String" resultType="hashmap" resultMap="tmptContentMap" >
+        /* 공지사항 정보 조회 */
+        SELECT 
+       		ID,
+       		TITLE,
+       		CONTENT,
+			TO_CHAR(REG_DATE, 'YYYY-MM-DD') REG_DATE,
+       		HITS_COUNT,
+       		(
+       		SELECT 
+       			AID.ATTACHMENT_ID 
+       		FROM
+       			ATTACHMENT_ID AID
+       		WHERE 
+       			NB_ID = #{noticeId}
+       		) AS ATTACHMENT_ID,
+       		TOP_YN
+       	FROM 
+        	NOTICE_BOARD
+        WHERE
+        	ID = #{noticeId}
+	</select>
+	
+	<delete id="DELETE_NOTICE_BOARD" parameterType="string">
+		/* 공지사항 삭제 */
+		DELETE FROM
+			NOTICE_BOARD
+		WHERE
+			ID = #{id}	
+	</delete>
+
+	<delete id="UPDATE_NOTICE_BOARD" parameterType="string">
+		/* 공지사항 수정 */
+		UPDATE 
+			NOTICE_BOARD
+		SET
+			TITLE = #{title},
+			CONTENT = #{content_html},
+			WORKER_ID = #{worker_id},
+			LAST_UPDATE_DATE = sysdate,
+			TOP_YN = #{top_yn},
+			REG_DATE = TO_DATE(#{reg_date}, 'YYYY-MM-DD')
+			
+		WHERE
+			ID = #{noticeId}	
+	</delete>
+
+		
+   <sql id="search_query">
+		<where>
+			1 = 1
+			<if test="searchKeyword != null and !''.equals(searchKeyword)">
+				<if test="search_option != null and search_option == 'title'.toString()">
+				   AND TITLE LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				<if test="search_option != null and search_option == 'content'.toString()">
+				   AND CONTENT LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>	
+		</where>
+    </sql>
+	
+	
+	
+</mapper>

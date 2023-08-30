@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="USER_MNG">
+
+    <select id="GET_LOGIN_HISTORY_LIST" parameterType="hashmap" resultType="hashmap" >
+        /* 사용자접속 로그 리스트 조회 */
+		SELECT
+			Y.RNUM,
+			Y.ID,
+			Y.LOGIN_ID,
+			Y.ACCESS_IP,
+			TO_CHAR(Y.ACCESS_DATE, 'YYYY-MM-DD/HH24MISS') AS ACCESS_DATE,
+			Y.SU_ID,
+			Y.ACCESS_INFO
+		FROM(
+		        SELECT 
+		            ROWNUM as RNUM,
+		            X.*
+		        FROM
+		            (
+		                SELECT 
+		                    Z.*
+		                FROM 
+		                    USER_LOGIN_HISTORY Z
+		                   <include refid="search_query" />
+		                ORDER BY ID DESC
+		            ) X    
+		        WHERE ROWNUM <![CDATA[<=]]> #{currpage} * #{displaycnt}
+		    ) Y
+		WHERE RNUM  <![CDATA[>]]> (#{currpage} - 1 ) * #{displaycnt}
+	</select>
+
+    <select id="GET_LOGIN_HISTORY_COUNT" parameterType="hashmap" resultType="int" >
+        /* 사용자접속로그 카운트조회 */
+        SELECT 
+        	COUNT(1) 
+       	FROM 
+        	USER_LOGIN_HISTORY
+       	<include refid = "search_query" />
+	</select>
+
+    <select id="GET_LOGIN_HISTORY_LIST_EXCEL" parameterType="hashmap" resultType="hashmap" >
+        /* 사용자접속 로그 리스트 엑셀 출력 조회 */
+        SELECT
+        	ROWNUM,
+        	ULH.ACCESS_DATE,
+        	ULH.LOGIN_ID,
+        	ULH.ACCESS_IP,
+        	ULH.ACCESS_INFO
+        FROM
+	        (
+		        SELECT 
+		        	LOGIN_ID,
+		        	ACCESS_IP,
+		        	ACCESS_DATE,
+		        	ACCESS_INFO
+		       	FROM 
+		         	USER_LOGIN_HISTORY
+		        ORDER BY ID DESC
+			) ULH
+	</select>
+
+
+<!-- login log -->
+
+
+
+	<select id="GET_USER_MNG_LIST_CNT" parameterType="map" resultType="int">
+		/* 사용자 건수 확인*/	
+		SELECT COUNT(1) AS CNT
+		  FROM
+		    ( SELECT SU.ID
+		           , SU.NAME
+		           , SU.DEPARMENT
+		           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '010' AND CV.CODE = SU.DEPARMENT ) AS DEPARMENT_NM
+		           , SU.TEL
+		           , SU.LOGIN_FAIL_COUNT
+		           , SU.ACCOUNT_STATUS
+		           , SU.REG_DATE
+		           , SU.LAST_UPDATE_DATE
+		           , SU.GRADE
+		           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '004' AND CV.CODE = SU.GRADE ) AS GRADE_NM
+		           , SU.WORKER_ID
+		           , SU.PASSWORD_UPDATE_DATE
+		           , SU.CHANGE_PASSWORD_YN
+		           , EMAIL
+		        FROM SYSTEM_USER SU
+			WHERE 
+				1=1
+				<if test="searchKeyword != null and searchKeyword != ''.toString()">
+				   AND SU.ID LIKE '%' || #{searchKeyword} || '%' OR SU.NAME LIKE '%' || #{searchKeyword} || '%'
+				</if>
+		  )		  
+	</select>
+	
+	<select id="GET_USER_MNG_LIST" parameterType="map" resultType="map">
+		/* 사용자 목록조회 */	
+		SELECT NUM
+		     , ID
+             , NAME
+             , DEPARMENT
+             , DEPARMENT_NM
+             , TEL
+             , LOGIN_FAIL_COUNT
+             , (SELECT VALUE FROM CODE_VALUE WHERE CLASS_CODE = '012' AND CODE = ACCOUNT_STATUS) AS ACCOUNT_STATUS
+             , REG_DATE
+             , LAST_UPDATE_DATE
+             , GRADE
+             , GRADE_NM
+             , WORKER_ID
+             , PASSWORD_UPDATE_DATE
+             , CHANGE_PASSWORD_YN
+             , EMAIL
+		FROM
+		  (SELECT ROWNUM NUM
+		        , ID
+	            , NAME
+	            , DEPARMENT
+	            , DEPARMENT_NM
+	            , TEL
+	            , LOGIN_FAIL_COUNT
+	            , ACCOUNT_STATUS
+	            , REG_DATE
+	            , LAST_UPDATE_DATE
+	            , GRADE
+	            , GRADE_NM
+	            , WORKER_ID
+	            , PASSWORD_UPDATE_DATE
+	            , CHANGE_PASSWORD_YN
+	            , EMAIL
+		  FROM
+		    (SELECT SU.ID
+		           , SU.NAME
+		           , SU.DEPARMENT
+		           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '010' AND CV.CODE = SU.DEPARMENT ) AS DEPARMENT_NM
+		           , SU.TEL
+		           , SU.LOGIN_FAIL_COUNT
+		           , SU.ACCOUNT_STATUS
+		           , TO_CHAR(SU.REG_DATE, 'YYYY/MM/DD') AS REG_DATE
+		           , TO_CHAR(SU.LAST_UPDATE_DATE, 'YYYY/MM/DD') AS LAST_UPDATE_DATE
+		           , SU.GRADE
+		           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '004' AND CV.CODE = SU.GRADE ) AS GRADE_NM
+		           , SU.WORKER_ID
+		           , TO_CHAR(PASSWORD_UPDATE_DATE, 'YYYY/MM/DD') AS PASSWORD_UPDATE_DATE
+		           , SU.CHANGE_PASSWORD_YN
+		           , EMAIL
+		    FROM SYSTEM_USER SU
+		    	WHERE 1=1
+				<if test="searchKeyword != null and searchKeyword != ''.toString()">
+				   AND SU.ID LIKE '%' || #{searchKeyword} || '%' OR SU.NAME LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				ORDER BY SU.ID ASC
+		    ) 
+		  )		
+		WHERE NUM <![CDATA[>=]]> (${displaycnt} * (${currpage}-1)) + 1
+		AND NUM  <![CDATA[<=]]> ${displaycnt} * ${currpage}
+	</select>
+
+	<select id="GET_USER_MNG_LIST_EXCEL" parameterType="map" resultType="map">
+		/* 사용자 엑셀 출력 */	
+		SELECT NUM
+		     , ID
+             , NAME
+             , DEPARMENT
+             , DEPARMENT_NM
+             , TEL
+             , LOGIN_FAIL_COUNT
+             , ACCOUNT_STATUS
+             , REG_DATE
+             , LAST_UPDATE_DATE
+             , GRADE
+             , GRADE_NM
+             , WORKER_ID
+             , PASSWORD_UPDATE_DATE
+             , CHANGE_PASSWORD_YN
+             , EMAIL
+		FROM
+		  (SELECT ROWNUM NUM
+		        , ID
+	            , NAME
+	            , DEPARMENT
+	            , DEPARMENT_NM
+	            , TEL
+	            , LOGIN_FAIL_COUNT
+	            , ACCOUNT_STATUS
+	            , REG_DATE
+	            , LAST_UPDATE_DATE
+	            , GRADE
+	            , GRADE_NM
+	            , WORKER_ID
+	            , PASSWORD_UPDATE_DATE
+	            , CHANGE_PASSWORD_YN
+	            , EMAIL
+		  FROM
+		    (SELECT SU.ID
+		           , SU.NAME
+		           , SU.DEPARMENT
+		           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '010' AND CV.CODE = SU.DEPARMENT ) AS DEPARMENT_NM
+		           , SU.TEL
+		           , SU.LOGIN_FAIL_COUNT
+		           , SU.ACCOUNT_STATUS
+		           , TO_CHAR(SU.REG_DATE, 'YYYY/MM/DD') AS REG_DATE
+		           , TO_CHAR(SU.LAST_UPDATE_DATE, 'YYYY/MM/DD') AS LAST_UPDATE_DATE
+		           , SU.GRADE
+		           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '004' AND CV.CODE = SU.GRADE ) AS GRADE_NM
+		           , SU.WORKER_ID
+		           , TO_CHAR(PASSWORD_UPDATE_DATE, 'YYYY/MM/DD') AS PASSWORD_UPDATE_DATE
+		           , SU.CHANGE_PASSWORD_YN
+		           , EMAIL
+		    FROM SYSTEM_USER SU
+		    	WHERE 1=1
+				<if test="searchKeyword != null and searchKeyword != ''.toString()">
+				   AND SU.ID LIKE '%' || #{searchKeyword} || '%' OR SU.NAME LIKE '%' || #{searchKeyword} || '%'
+				</if>
+				ORDER BY SU.ID ASC
+		    ) 
+		  )
+	</select>
+
+
+	<insert id="INSERT_USER" parameterType="map">
+    	/* 사용자 정보 입력 */
+        INSERT INTO SYSTEM_USER 
+        	(ID, NAME, DEPARMENT, TEL, PASSWORD, LOGIN_FAIL_COUNT, ACCOUNT_STATUS, REG_DATE, LAST_UPDATE_DATE, GRADE, WORKER_ID, PASSWORD_UPDATE_DATE, CHANGE_PASSWORD_YN, EMAIL) 
+        VALUES 
+            (#{user_id}, #{name}, #{deparment}, #{tel}, #{password}, 0, '01', SYSDATE, null, #{grade}, #{worker_id}, SYSDATE+(select config_value from system_configuration where code = '25'), 'N', #{email}  )
+    </insert>
+
+	<select id="ID_OVERLAP_CHECK" parameterType="map" resultType="int">
+		/* 아이디 중복 검사 */
+		SELECT COUNT(1)
+		  FROM SYSTEM_USER
+		 WHERE ID = #{user_id}
+	</select>
+
+	<select id="GET_USER_DETAIL_INFO" parameterType="map" resultType="map">
+	/* 사용자 상세정보 확인 */
+	  SELECT SU.ID
+           , SU.NAME
+           , SU.DEPARMENT
+           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '010' AND CV.CODE = SU.DEPARMENT ) AS DEPARMENT_NM
+           , SU.TEL
+           , SU.LOGIN_FAIL_COUNT
+           , SU.ACCOUNT_STATUS
+           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '012' AND CV.CODE = SU.ACCOUNT_STATUS ) AS ACCOUNT_STATUS_NM
+           , SU.REG_DATE
+           , SU.LAST_UPDATE_DATE
+           , SU.GRADE
+           , ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '004' AND CV.CODE = SU.GRADE ) AS GRADE_NM
+           , SU.WORKER_ID
+           , TO_CHAR(SU.PASSWORD_UPDATE_DATE, 'YYYY/MM/DD') AS PASSWORD_UPDATE_DATE
+           , SU.CHANGE_PASSWORD_YN
+           , EMAIL
+	    FROM SYSTEM_USER SU
+	    WHERE ID = #{user_id}
+	</select>
+
+	<update id="SET_USER_PW" parameterType="map" >
+		/* 비밀번호 변경 */
+		UPDATE SYSTEM_USER 
+		SET 
+			PASSWORD = #{password},
+			PASSWORD_UPDATE_DATE = (sysdate + (SELECT CONFIG_VALUE FROM SYSTEM_CONFIGURATION WHERE CODE = '25')),
+			CHANGE_PASSWORD_YN='Y'  
+		WHERE ID = #{id}
+	</update>
+	
+	<update id="SET_USER_LOGINFAILCOUNT" parameterType="map" >
+		/* 비밀번호 실패 룃수 초기화 */
+		UPDATE SYSTEM_USER SET LOGIN_FAIL_COUNT = 0, ACCOUNT_STATUS='01' WHERE ID = #{user_id}
+	</update>
+
+	<delete id="DELETE_USER" parameterType="map" >
+		DELETE FROM SYSTEM_USER WHERE ID = #{id} 
+	</delete>
+
+	<update id="UPDATE_INFO_IN_HEADER" parameterType="map" >
+		/* 사용자 정보 수정 */
+		UPDATE SYSTEM_USER SET 
+			DEPARMENT = #{deparment},
+			TEL = #{tel},
+			EMAIL = #{email} 
+		WHERE ID = #{user_id}
+	</update>
+	
+	
+  <sql id="search_query">
+		<where>
+			1 = 1
+			<if test="start_date != null and end_date != null">
+				AND ACCESS_DATE
+					BETWEEN 
+						TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 
+					AND 
+						TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+			</if>
+			<if test="searchKeyword != null and !''.equals(searchKeyword)">
+				<if test="search_type_option != null and search_type_option == 'login_id'.toString()">
+				   AND LOGIN_ID LIKE '%' || #{searchKeyword} || '%'
+				</if>
+			</if>	
+		</where>
+    </sql>
+
+</mapper>

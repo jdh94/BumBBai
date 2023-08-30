@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="VIDEO_DATA">
+
+    <resultMap type="HashMap" id="tmptContentMap">
+        <result property="CONTENT" column="CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="CONTENT_CHANGE" column="CONTENT_CHANGE" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="CVD.CONTENT" column="CVD.CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="CVD.CONTENT_CHANGE" column="CVD.CONTENT_CHANGE" jdbcType="CLOB" javaType="java.lang.String" />
+    </resultMap>
+
+    <select id="GET_VIDEO_DATA_LIST" parameterType="hashmap" resultType="hashmap"  resultMap="tmptContentMap">
+        /* 수집자료관리 리스트조회 */
+		SELECT 
+			Y.RNUM,
+			Y.ID,
+			(SELECT SOURCE_NAME FROM VIDEO_MINING_COLLECTOR WHERE ID=Y.VMC_ID) as SOURCE_NAME,
+			Y.TITLE,
+			Y.CONTENT,
+			TO_CHAR(Y.LAST_COLLECT_DATE, 'YYYY-MM-DD') LAST_COLLECT_DATE,
+			(SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '007' AND CODE = Y.STATUS ) AS STATUS_NAME,
+			(CASE WHEN Y.STATUS = '04' THEN 'Y' ELSE 'N' END) AS DEL_YN
+		FROM(
+		        SELECT 
+		            ROWNUM as RNUM,
+		            X.*
+		        FROM
+		            (
+		                SELECT 
+		                    Z.*
+		                FROM 
+		                    COLLECT_VIDEO_DATA Z
+		                   <include refid="search_query" />
+		                ORDER BY ID DESC
+		            ) X    
+		        WHERE ROWNUM <![CDATA[<=]]> #{currpage} * #{displaycnt}
+		    ) Y
+		WHERE RNUM  <![CDATA[>]]> (#{currpage} - 1 ) * #{displaycnt}
+	</select>
+    
+    <select id="GET_VIDEO_DATA_COUNT" parameterType="hashmap" resultType="int" >
+        /* 수집자료관리 카운트조회 */
+        SELECT 
+        	COUNT(1) 
+       	FROM 
+        	COLLECT_VIDEO_DATA
+       	<include refid = "search_query" />
+	</select>
+	
+	<select id="GET_VIDEO_DATA_INFO" parameterType="hashmap" resultType="hashmap"  resultMap="tmptContentMap">
+		/* 수집자료관리 정보조회 */
+		SELECT
+			CVD.ID,
+        	( SELECT SOURCE_NAME FROM VIDEO_MINING_COLLECTOR WHERE ID = CVD.VMC_ID ) AS SOURCE_NAME,
+        	( SELECT SOURCE_TYPE FROM VIDEO_MINING_COLLECTOR WHERE ID = CVD.VMC_ID ) AS SOURCE_TYPE,
+			CVD.VIDEO_ID,
+			TO_CHAR(CVD.UPLOAD_DATE, 'YYYY-MM-DD') UPLOAD_DATE,
+			TO_CHAR(CVD.LAST_COLLECT_DATE, 'YYYY-MM-DD') LAST_COLLECT_DATE,
+			CVD.TITLE,
+			CVD.TITLE_CHANGE,
+			CVD.CONTENT,
+			CVD.CONTENT_CHANGE,
+			CVD.CASE_LAW_NO_INDEX,
+			CVD.VIDEO_CATEGORY,
+			CVD.ORG_CATEGORY,
+			CVD.LAW_TYPE,
+			CVD.HASH_TAG,
+			CVD.HASH_TAG_CHANGE,
+			CVD.PLAY_TYPE,
+			CVD.STATUS,
+			CVD.LIMIT_REASON,
+			CVD.REMARK
+		FROM
+			COLLECT_VIDEO_DATA CVD
+		WHERE 
+			CVD.ID = #{id}
+	</select>
+	 
+
+	<update id="UPDATE_VIDEO_DATA" parameterType="map">
+		/* 수집자료관리 수정 */
+		UPDATE COLLECT_VIDEO_DATA 
+		SET 
+			WORKER_ID = #{worker_id},
+        	TITLE_CHANGE = #{title_change}, 
+        	CONTENT_CHANGE = #{content_change}, 
+        	VIDEO_CATEGORY = #{video_category}, 
+        	ORG_CATEGORY = #{org_category}, 
+			<if test="law_type != null and !''.equals(law_type)">
+				LAW_TYPE = #{law_type},
+			</if>
+        	HASH_TAG_CHANGE = #{hash_tag_change}, 
+        	PLAY_TYPE = #{play_type},
+        	STATUS = #{status},
+        	remark = #{remark, jdbcType=CHAR},
+        	<if test="limit_reason != null and !''.equals(limit_reason)">
+				LIMIT_REASON = #{limit_reason},
+			</if>
+			LAST_UPDATE_DATE = sysdate
+		WHERE
+			ID = #{id}
+	</update>
+
+	<update id="UPDATE_VIDEO_LIST" parameterType="map">
+		/* 수집자료관리 수정 */
+		UPDATE COLLECT_VIDEO_DATA 
+		SET 
+			WORKER_ID = #{worker_id},
+			STATUS = #{status}
+			
+		 WHERE ID IN (
+		 	<foreach collection="video_ids" item="id" separator="," index="status">
+		 		${id}
+		 	</foreach>
+		 )
+	</update>
+
+	<update id="UPDATE_CATEGORY" parameterType="map">
+		/* 수집자료관리 비디오카테고리 일괄수정 */
+		UPDATE COLLECT_VIDEO_DATA 
+		SET 
+			WORKER_ID = #{worker_id},
+			VIDEO_CATEGORY = #{video_category}
+		WHERE ID IN (
+		 <foreach collection="video_ids" item="id" separator="," index="status">
+		 	${id}
+		 </foreach>
+		 )
+	</update>
+
+	<update id="UPDATE_ORG_CATEGORY" parameterType="map">
+		/* 수집자료관리 기관카테고리 일괄수정 */
+		UPDATE COLLECT_VIDEO_DATA 
+		SET 
+			WORKER_ID = #{worker_id},
+			ORG_CATEGORY = #{org_category}
+		WHERE ID IN (
+		 <foreach collection="video_ids" item="id" separator="," index="status">
+		 	${id}
+		 </foreach>
+		 )
+	</update>
+
+	<update id="UPDATE_ALL" parameterType="map">
+		/* 수집자료관리 일괄수정 */
+		UPDATE COLLECT_VIDEO_DATA 
+		SET 
+		<if test="video_category != null and !''.equals(video_category)">
+			VIDEO_CATEGORY = #{video_category},
+		</if>
+		<if test="org_category != null and !''.equals(org_category)">
+			ORG_CATEGORY = #{org_category},
+		</if>
+		<if test="status != null and !''.equals(status)">
+			STATUS = #{status},
+		</if>
+		<if test="play_type != null and !''.equals(play_type)">
+			play_type = #{play_type},
+		</if>
+		<if test="law_type != null and !''.equals(law_type)">
+			law_type = #{law_type},
+		</if>
+		<if test="limit_reason != null and !''.equals(limit_reason)">
+			limit_reason = #{limit_reason},
+		</if>
+			WORKER_ID = #{worker_id}
+		WHERE ID IN (
+		 <foreach collection="video_ids" item="id" separator="," index="status">
+		 	${id}
+		 </foreach>
+		 )
+	</update>
+
+	<insert id="INSERT_CASE_LAW_INFO" parameterType="map">
+        /* 사건정보 입력 */
+	    <selectKey keyProperty="clivSeq" resultType="int" order="BEFORE">
+			SELECT CLIV_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+	    INSERT INTO CASE_LAW_INFO(
+        	ID,
+        	COURT_NAME, 
+        	CASE_LAW_NO, 
+        	TITLE, 
+        	SENTENCE_DATE,
+<!--          	SUMMARY, -->
+        	LAW_CASE_LINK
+        )
+        VALUES (
+        	#{clivSeq, jdbcType=INTEGER},
+	        #{court_name},
+	        #{court_law_no, jdbcType=VARCHAR},
+<!-- 	        #{title}, -->
+	        #{summary, jdbcType=VARCHAR},
+	        TO_DATE(#{sentence_date}, 'YYYY-MM-DD'),
+<!-- 	        #{summary, jdbcType=VARCHAR}, -->
+	        #{law_case_link, jdbcType=VARCHAR}
+	    )
+	</insert>
+
+
+	<insert id="INSERT_CASE_LAW_GROUP" parameterType="map">
+        /* 사건정보그룹 입력 */
+        INSERT INTO CASE_LAW_GROUP(
+        	ID,
+        	CVD_ID, 
+        	CLI_ID 
+        )
+        VALUES (
+        	CLIV_SEQ.NEXTVAL,
+	        #{id},
+	        #{clivSeq}
+	    )
+	</insert>
+
+
+    <select id="GET_CLI_LIST" parameterType="hashmap" resultType="String">
+        /* 판례정보 리스트조회 */
+		SELECT 
+			CASE_LAW_NO
+		FROM
+			CASE_LAW_INFO
+		WHERE ID IN (
+		 <foreach collection="cli_ids" item="id" separator="," index="status">
+		 	${id}
+		 </foreach>
+		 )
+	</select>
+
+
+    <select id="GET_CLI_ID_LIST" parameterType="hashmap" resultType="String">
+        /* 판례정보 id리스트 조회 */
+		SELECT 
+			CLI_ID
+		FROM
+			CASE_LAW_GROUP
+		WHERE
+			CVD_id = #{id}
+	</select>
+
+
+	<delete id="DELETE_CASE_LAW_INFO" parameterType="map">
+        /* 사건정보 삭제 */
+    	DELETE FROM 
+    		CASE_LAW_INFO
+		WHERE
+			ID = #{cli_id}   	    
+    </delete>
+
+	<delete id="DELETE_CASE_LAW_GROUP" parameterType="map">
+        /* 사건정보그룹 삭제 */
+    	DELETE FROM 
+    		CASE_LAW_GROUP
+		WHERE
+			CLI_ID = #{cli_id}   	    
+    </delete>
+
+
+
+	 <!-- 날짜가 선택되지 않더라도 오류 없도록 수정 -->
+	 <sql id="search_query">
+		<where>
+			1 = 1
+			<if test="search_date_option != null and search_date_option != ''.toString()">
+				<choose>
+					<when test="search_date_option == 'reg_date'" >
+					AND UPLOAD_DATE
+						BETWEEN 
+							TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 
+						AND 
+							TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+					</when>
+					<when test="search_date_option == 'last_col_date'">
+					AND LAST_COLLECT_DATE
+						BETWEEN 
+							TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 
+						AND 
+							TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+					</when>
+				</choose>
+			</if>
+			
+			<choose>
+				<when test="limit_status_opt != null and limit_status_opt == '01'.toString()">
+					AND STATUS = #{limit_status_opt}
+				</when>
+				<when test="limit_status_opt != null and limit_status_opt == '02'.toString()">
+					AND STATUS = #{limit_status_opt}
+				</when>
+				<when test="limit_status_opt != null and limit_status_opt == '03'.toString()">
+					AND STATUS = #{limit_status_opt}
+				</when>
+				<when test="limit_status_opt != null and limit_status_opt == '04'.toString()">
+					AND STATUS = #{limit_status_opt}
+				</when>
+			</choose>
+			
+			
+			<if test="searchKeyword != null and !''.equals(searchKeyword)">
+				AND (
+					TITLE LIKE '%' || #{searchKeyword} ||'%' OR
+					CONTENT LIKE '%' || #{searchKeyword} ||'%' OR
+					HASH_TAG LIKE '%' || #{searchKeyword} ||'%'
+				)
+			</if>
+			
+			<if test="collectorchk != null and !''.equals(collectorchk)">
+				AND 
+					VMC_ID IN (
+					<foreach collection="collector_ids" item="id" separator="," index="status">
+						${id}
+					</foreach>
+					)
+				
+			</if>
+		</where>
+    </sql>
+	
+</mapper>

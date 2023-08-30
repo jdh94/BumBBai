@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="FILE_MANAGER">
+
+	<resultMap type="map" id="latest-data">
+		<result property="FILE_CN" column="FILE_CN" jdbcType="CLOB" javaType="java.lang.String" />
+	</resultMap>
+
+	<select id="GET_FILE_CNT_BY_ID" parameterType="string" resultType="int">
+	/* ID 별 파일 존재여부 조회 */
+		SELECT 
+			COUNT(1) 
+		FROM 
+			ATTACHMENT_ID
+		WHERE 
+			ATTACHMENT_ID = #{id}
+	</select>
+	
+	<select id="GET_FILE_ALL_CNT_BY_ID" parameterType="string" resultType="int">
+	/* ID 별  모든 파일 카운트 조회  */
+		SELECT 
+			COUNT(1) 
+		FROM
+			COMTNFILEDETAIL
+		WHERE 
+			ATCH_FILE_ID = #{id} AND
+			USE_YN = 'Y'
+	</select>
+
+	<select id="GET_FILES_BY_ID" parameterType="string" resultMap="latest-data" >
+	/* ID 별 파일 목록 조회 */
+		SELECT 	
+			ATTACHMENT_ID,
+			FILE_SN,
+			FILE_PATH,
+			SAVE_FILE_NAME,
+			ORIGNAL_FILE_NAME,
+			FILE_EXT,
+			FILE_SIZE,
+			FILE_CN,
+			USE_YN
+		FROM
+			ATTACHMENT_FILE
+		WHERE
+			ATTACHMENT_ID = #{id} AND
+			USE_YN = 'Y'
+		ORDER BY
+			FILE_SN
+	</select>
+	
+	<select id="GET_FILE_BY_ID_AND_ORDER" parameterType="map" resultMap="latest-data">
+	/* ID, ORDER 로 단일 파일 조회 */
+		SELECT
+			ATTACHMENT_ID,
+			FILE_SN,
+			FILE_PATH,
+			SAVE_FILE_NAME,
+			ORIGNAL_FILE_NAME,
+			FILE_EXT,
+			FILE_SIZE,
+			FILE_CN,
+			USE_YN
+		FROM
+			ATTACHMENT_FILE
+		WHERE
+			ATTACHMENT_ID = #{id} AND
+			USE_YN = 'Y'
+			AND FILE_SN = #{order}
+		ORDER BY
+			FILE_SN
+	</select>
+	
+	<select id="GET_MAX_ORDER_BY_ID" parameterType="string" resultType="int">
+		/* ID 별 MAX ORDER 조회 */
+		SELECT 
+			NVL(MAX(FILE_SN) + 1, 0)
+		FROM 
+			ATTACHMENT_FILE
+		WHERE 
+			ATTACHMENT_ID = #{id}
+		
+	</select>
+	
+	<insert id="SAVE_BASIC_FILE" parameterType="map">
+	/* 파일 저장 */
+		INSERT 
+			INTO ATTACHMENT_ID
+			(
+				ATTACHMENT_ID,
+				REG_DATE,
+				USE_YN,
+				NB_ID
+			)
+			VALUES
+			(
+				#{id},
+				SYSDATE,
+				'Y',
+				#{nb_id}
+			)		
+	</insert>
+
+	<insert id="SAVE_DETAIL_FILE" parameterType="map">
+	/* 파일 상세정보 저장 */
+		INSERT 
+			INTO ATTACHMENT_FILE
+			( 
+				ATTACHMENT_ID,
+				FILE_SN,
+				FILE_PATH,
+				SAVE_FILE_NAME,
+				ORIGNAL_FILE_NAME,
+				FILE_EXT,
+				FILE_SIZE,
+				FILE_CN,
+				USE_YN
+			)
+			VALUES
+			( 
+				#{id}, 
+				#{order}, 
+				#{path}, 
+				#{fileName}, 
+				#{originalFileName}, 
+				#{extension}, 
+				#{size}, 
+				#{content, jdbcType=VARCHAR}, 
+				'Y'
+			)	
+	</insert>
+	
+	<delete id="DELETE_BASIC_FILE" parameterType="string">
+		/* 파일 기본정보 삭제처리 */
+		DELETE FROM
+			ATTACHMENT_ID
+		WHERE
+			NB_ID = #{id}	
+	</delete>
+	
+	<update id="DELETE_DETAIL_FILE" parameterType="map">
+	/* 파일 상세정보 삭제처리 (사용여부 N) */
+		DELETE FROM
+			ATTACHMENT_FILE
+		WHERE
+			ATTACHMENT_ID = #{id} AND 
+			FILE_SN = #{order}
+		
+	</update>
+	
+	<delete id="DELETE_ALL_DETAIL_FILE" parameterType="string">
+	/* 모든 상세 파일 삭제 */
+		DELETE FROM
+			ATTACHMENT_FILE
+		WHERE
+			ATTACHMENT_ID = (
+							SELECT
+								ATID.ATTACHMENT_ID
+							FROM
+								ATTACHMENT_ID ATID
+							WHERE
+								NB_ID = #{id}
+							)
+	</delete>
+	
+	<select id="GET_NEXT_ID" parameterType="string" resultType="string">
+	/* 다음 파일 ID 조회 */
+		<bind name="prefix_size" value="__parameter.length" />
+		SELECT
+			#{__parameter}||LPAD(SUBSTR(MAX(ATCH_FILE_ID), #{prefix_size}) + 1, 12, '0') AS NEXTVAL
+		FROM
+			COMTNFILE
+		WHERE ATCH_FILE_ID LIKE #{__parameter}||'%'
+	</select>
+	
+	<select id="GET_MAX_ID" parameterType="string" resultType="string">
+	/* 파일 MAX ID 조회 */
+		SELECT
+			MAX(ATTACHMENT_ID)
+		FROM
+			ATTACHMENT_ID
+		WHERE ATTACHMENT_ID LIKE #{__parameter}||'%'
+	</select>
+	
+	<select id="GET_DETAIL_FILES_BY_ID" parameterType="string" resultMap="latest-data">
+	/* ID 별 파일 상세 목록 조회 (생성일 포함) */
+		 SELECT
+	        A.ATCH_FILE_ID,
+	        B.FILE_CN,
+	        B.FILE_SN,
+	        B.FILE_STRE_COURS,
+	        B.STRE_FILE_NM,
+	        B.FILE_EXTSN,
+	        B.ORIGNL_FILE_NM,
+	        B.FILE_SIZE,
+	        A.CREAT_DT    
+	    FROM
+	        COMTNFILE A,
+	        COMTNFILEDETAIL B    
+	    WHERE
+	        A.ATCH_FILE_ID = #{id} AND
+	        A.ATCH_FILE_ID = B.ATCH_FILE_ID AND 
+	        A.USE_AT = 'Y' AND   
+	        B.USE_YN = 'Y'        
+	    ORDER BY
+	        B.FILE_SN
+	</select>
+
+	<select id="GET_EDITOR_IMAGE_BY_ID" parameterType="string" resultType="map">
+		/* ID 로 에디터 파일 조회 */
+		SELECT 
+			ID,
+			FILE_STRE_COURS,
+			STRE_FILE_NM,
+			ORIGNL_FILE_NM,
+			FILE_EXTSN,
+			FILE_SIZE
+		FROM
+		   EDITOR_IMAGE_FILE
+		WHERE
+		   ID = #{__parameter} AND 
+		   USE_YN = 'Y'
+	</select>
+	
+	<select id="GET_NEXT_EDITOR_IMAGE_ID" resultType="string">
+	/* 다음 에디터 ID 조회 */
+		SELECT
+			 NVL(MAX(ID) + 1, 1)
+		FROM 
+			EDITOR_IMAGE_FILE
+	</select>
+	
+	<insert id="ADD_EDITOR_IMAGE" parameterType="map">
+	/* 에디터 이미지 저장 */
+		INSERT 
+			INTO
+		EDITOR_IMAGE_FILE 
+			(
+				ID,
+				FILE_STRE_COURS,
+				STRE_FILE_NM,
+				ORIGNL_FILE_NM,
+				FILE_EXTSN,
+				FILE_SIZE,
+				USE_YN
+			)
+		VALUES
+			(
+				#{id},
+				#{path},
+				#{fileName},
+				#{originalFileName},
+				#{extension},
+				#{size},
+				'Y'
+			)
+	</insert>
+	
+	<update id="DELETE_EDITOR_IMAGE" parameterType="string">
+	/* 에디터 이미지 파일 사용안함 처리 */
+		UPDATE
+			EDITOR_IMAGE_FILE
+		SET
+			USE_YN = 'N'
+		WHERE
+			ID = #{__parameter}
+	</update>
+	
+	<update id="UPDATE_VIEW_INFO" parameterType="map">
+		/* 공통 파일테이블 첨부파일 미리보기 정보 갱신 */
+		UPDATE
+			COMTNFILEDETAIL
+		SET 
+			VIEW_NAME = #{view_name, jdbcType=VARCHAR},
+            VIEW_PATH = #{view_path, jdbcType=VARCHAR},
+            VIEW_REAL_PATH = #{view_real_path, jdbcType=VARCHAR}
+		WHERE
+			ATCH_FILE_ID = #{id} AND
+			FILE_SN = #{order}
+	</update>
+			
+</mapper>

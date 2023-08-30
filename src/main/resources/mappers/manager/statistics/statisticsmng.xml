@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="STATISTICS">
+
+    <resultMap type="HashMap" id="tmptContentMap">
+        <result property="CONTENT" column="CONTENT" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="TMPT_FUNC" column="TMPT_FUNC" jdbcType="CLOB" javaType="java.lang.String" />
+        <result property="TMPT_COMMENT" column="TMPT_COMMENT" jdbcType="CLOB" javaType="java.lang.String" />
+    </resultMap>
+
+    <select id="GET_SEARCH_STAT_LIST" parameterType="hashmap" resultType="hashmap" >
+        /* 검색어 통계 조회 */
+		SELECT 
+			ROWNUM,
+			KEYWORD,
+			CNT
+		FROM
+		(
+			SELECT 
+				KEYWORD,
+				COUNT(1) AS CNT
+			FROM
+				SEARCH_KEYWORD_STAT
+			WHERE
+				SEARCH_DATE 
+				BETWEEN 
+					TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+				AND 
+					TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+			GROUP BY KEYWORD
+			ORDER BY COUNT(1) DESC
+		) SEARCH
+		WHERE ROWNUM <![CDATA[<=]]> 100
+	</select>
+
+
+    <select id="GET_COLLECT_STAT_LIST" parameterType="hashmap" resultType="hashmap" >
+        /* 자료수집 통계 조회 */
+		<choose>
+			<when test="stat_group != null and stat_group == 'category'.toString()">
+				SELECT
+				    ROWNUM,
+				    CS.*
+				FROM
+				    (
+				        SELECT
+				            *
+				        FROM
+				            (
+				                SELECT
+				                    (
+				                        CASE
+				                            WHEN video_category IS NULL THEN
+				                                '미지정'
+				                            ELSE
+				                                (
+				                                    SELECT
+				                                        value
+				                                    FROM
+				                                        code_value CV
+				                                    WHERE
+				                                            class_code = '020'
+				                                        AND code = CVD.video_category
+				                                )
+				                        END
+				                    )                                           AS VIDEO_CATEGORY_NM,
+				                    video_category,
+				                    to_char(last_collect_date, #{stat_date})      AS last_collect_date
+				                FROM
+				                    collect_video_data CVD
+				                WHERE
+				                    last_collect_date 
+				                    BETWEEN
+				                    	TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 
+				                    AND 
+				                    	TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+				            ) PIVOT (
+				                count(*)
+				                FOR last_collect_date
+				                IN ( ${statCollumn} )
+				            )
+				        ORDER BY
+				            video_category ASC
+				    ) CS
+			</when>
+			<when test="stat_group != null and stat_group == 'channel'.toString()">
+				SELECT
+					ROWNUM,
+					CS.*
+				FROM
+				(
+					SELECT * 
+					  FROM (
+					    SELECT ( SELECT SOURCE_NAME FROM VIDEO_MINING_COLLECTOR VMC WHERE ID = VMC_ID ) AS SOURCE_NAME
+					         , VMC_ID
+					         , TO_CHAR(LAST_COLLECT_DATE, #{stat_date}) AS LAST_COLLECT_DATE
+					    FROM COLLECT_VIDEO_DATA CVD
+					                   WHERE LAST_COLLECT_DATE 				                   
+					                   BETWEEN 
+									   		TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+									   AND 
+											TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+								       ORDER BY CATEGORY, CATEGORY2 ASC
+					    )
+					 PIVOT (
+					    COUNT(*) FOR LAST_COLLECT_DATE IN ( 
+					       ${statCollumn}
+					    )
+					)
+					ORDER BY VMC_ID
+				) CS
+				
+			</when>
+			<when test="stat_group != null and stat_group == 'lawcase'.toString()">
+				SELECT
+					ROWNUM,
+					CS.*
+				FROM
+				(
+					SELECT * 
+					  FROM (
+					    SELECT ( CASE WHEN LAW_TYPE IS NULL THEN '미지정' 
+					                  ELSE ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '017' AND CODE = CVD.LAW_TYPE ) 
+					                  END ) AS LAW_NM
+					         
+					         , TO_CHAR(LAST_COLLECT_DATE, #{stat_date}) AS LAST_COLLECT_DATE
+					    FROM COLLECT_VIDEO_DATA CVD
+					                   WHERE LAST_COLLECT_DATE 
+					                   BETWEEN 
+									   		TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+									   AND 
+											TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+								       ORDER BY LAW_TYPE ASC
+					    )
+					 PIVOT (
+					    COUNT(*) FOR LAST_COLLECT_DATE IN ( 
+					       ${statCollumn}
+					    )
+					)
+				) CS
+			</when>
+			<when test="stat_group != null and stat_group == 'openyn'.toString()">
+				SELECT
+					ROWNUM,
+					CS.*
+				FROM
+				(
+					SELECT * 
+					  FROM (
+					    SELECT (  SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '007' AND CODE = CVD.STATUS ) AS STATUS_NM
+					         , TO_CHAR(LAST_COLLECT_DATE, #{stat_date}) AS LAST_COLLECT_DATE
+					    FROM COLLECT_VIDEO_DATA CVD
+					                   WHERE LAST_COLLECT_DATE 
+					                   BETWEEN 
+									   		TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+									   AND 
+											TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+								       ORDER BY LAW_TYPE ASC
+					    )
+					 PIVOT (
+					    COUNT(*) FOR LAST_COLLECT_DATE IN ( 
+					       ${statCollumn}
+					    )
+					)
+				) CS
+			</when>
+		</choose>
+ 	</select>
+
+
+
+
+
+    <select id="GET_USE_STAT_LIST" parameterType="hashmap" resultType="hashmap" >
+        /* 자료이용 통계 조회 */
+		<choose>
+			<when test="stat_group != null and stat_group == 'category'.toString()">
+				SELECT
+					ROWNUM,
+					US.*
+				FROM
+				(
+					SELECT * 
+					  FROM (
+					    SELECT (  CASE WHEN VIDEO_CATEGORY IS NULL THEN '미지정' 
+					              ELSE ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '020' AND CODE = CVD.VIDEO_CATEGORY ) 
+					              END ) AS VIDEO_CATEGORY_NM
+					         , VIDEO_CATEGORY
+					         , TO_CHAR(LAST_COLLECT_DATE, #{stat_date}) AS LAST_COLLECT_DATE
+					         , VIEW_COUNT AS CNT FROM COLLECT_VIDEO_DATA CVD
+					                   WHERE LAST_COLLECT_DATE 	
+					                   BETWEEN 
+									   		TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+									   AND 
+											TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+						)
+					 PIVOT (
+					    SUM( CNT ) 
+					    FOR LAST_COLLECT_DATE 
+					    IN ( 
+					       ${statCollumn}
+					    )
+					)
+					ORDER BY VIDEO_CATEGORY ASC
+				) US
+			</when>
+			<when test="stat_group != null and stat_group == 'channel'.toString()">
+				SELECT
+					US.*,
+					ROWNUM
+				FROM
+				(
+					SELECT * 
+					  FROM (
+					    SELECT ( SELECT SOURCE_NAME FROM VIDEO_MINING_COLLECTOR VMC WHERE ID = VMC_ID ) AS SOURCE_NAME
+					         , VMC_ID
+					         , TO_CHAR(LAST_COLLECT_DATE, #{stat_date}) AS LAST_COLLECT_DATE
+					         , VIEW_COUNT AS CNT FROM COLLECT_VIDEO_DATA CVD
+					                   WHERE LAST_COLLECT_DATE 				                   
+					                   BETWEEN 
+									   		TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+									   AND 
+											TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+								       ORDER BY CATEGORY, CATEGORY2 ASC
+					    )
+					 PIVOT (
+					    SUM(NVL(CNT,0)) FOR LAST_COLLECT_DATE IN ( 
+					       ${statCollumn}
+					    )
+					)
+					ORDER BY VMC_ID
+				) US
+			</when>
+			<when test="stat_group != null and stat_group == 'lawcase'.toString()">
+				SELECT
+					US.*,
+					ROWNUM
+				FROM
+				(
+					SELECT * 
+					  FROM (
+					    SELECT ( CASE WHEN LAW_TYPE IS NULL THEN '미지정' 
+					                  ELSE ( SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '017' AND CODE = CVD.LAW_TYPE ) 
+					                  END ) AS LAW_NM
+					         
+					         , TO_CHAR(LAST_COLLECT_DATE, #{stat_date}) AS LAST_COLLECT_DATE
+					         , VIEW_COUNT AS CNT FROM COLLECT_VIDEO_DATA CVD
+					                   WHERE LAST_COLLECT_DATE 
+					                   BETWEEN 
+									   		TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+									   AND 
+											TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+								       ORDER BY LAW_TYPE ASC
+					    )
+					 PIVOT (
+					    SUM(NVL(CNT,0)) FOR LAST_COLLECT_DATE IN ( 
+					       ${statCollumn}
+					    )
+					)
+				) US
+			</when>
+			<when test="stat_group != null and stat_group == 'openyn'.toString()">
+				SELECT
+					US.*,
+					ROWNUM
+				FROM
+				(
+					SELECT * 
+					  FROM (
+					    SELECT (  SELECT VALUE FROM CODE_VALUE CV WHERE CLASS_CODE = '007' AND CODE = CVD.STATUS ) AS STATUS_NM
+					         , TO_CHAR(LAST_COLLECT_DATE, #{stat_date}) AS LAST_COLLECT_DATE
+					         , VIEW_COUNT AS CNT FROM COLLECT_VIDEO_DATA CVD
+					                   WHERE LAST_COLLECT_DATE 
+					                   BETWEEN 
+									   		TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000
+									   AND 
+											TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+								       ORDER BY LAW_TYPE ASC
+					    )
+					 PIVOT (
+					    SUM(NVL(CNT,0)) FOR LAST_COLLECT_DATE IN ( 
+					       ${statCollumn}
+					    )
+					)
+				) US
+			</when>
+		</choose>
+ 	</select>
+
+  
+    <select id="GET_CODE_VALUE" parameterType="String" resultType="String" >
+        /* 메뉴 코드값 조회 */
+		SELECT 
+			VALUE AS LAW_NM
+		FROM
+			CODE_VALUE
+		WHERE
+			CLASS_CODE = #{classCode}
+ 	</select>	
+  
+  
+    <select id="GET_STAT_COLLUMN" parameterType="hashmap" resultType="String" >
+        /* 통계 날짜 조회 */
+		<choose>
+			<when test="stat_date != null and stat_date == 'YYYYMMDD'.toString()">
+				SELECT LISTAGG(COLLECT_DATE, ',') WITHIN GROUP(ORDER BY COLLECT_DATE )
+				FROM ( SELECT DISTINCT ''''||TO_CHAR(LAST_COLLECT_DATE, 'YYYYMMDD')||'''' AS COLLECT_DATE FROM COLLECT_VIDEO_DATA AA  
+				WHERE LAST_COLLECT_DATE BETWEEN TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+				)
+			</when>
+			<when test="stat_date != null and stat_date == 'YYYYMM'.toString()">
+				SELECT LISTAGG(COLLECT_DATE, ',') WITHIN GROUP(ORDER BY COLLECT_DATE )
+				FROM ( SELECT DISTINCT ''''||TO_CHAR(LAST_COLLECT_DATE, 'YYYYMM')||'''' AS COLLECT_DATE FROM COLLECT_VIDEO_DATA AA
+				WHERE LAST_COLLECT_DATE BETWEEN TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+				 ) 
+			</when>
+			<when test="stat_date != null and stat_date == 'YYYY'.toString()">
+				SELECT LISTAGG(COLLECT_DATE, ',') WITHIN GROUP(ORDER BY COLLECT_DATE )
+				FROM ( SELECT DISTINCT ''''||TO_CHAR(LAST_COLLECT_DATE, 'YYYY')||'''' AS COLLECT_DATE FROM COLLECT_VIDEO_DATA AA  
+				WHERE LAST_COLLECT_DATE BETWEEN TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+				)
+			</when>
+		</choose>
+ 	</select>	
+
+
+    <select id="GET_STAT_COLLUMN2" parameterType="hashmap" resultType="String" >
+        /* 통계 날짜 조회2 */
+		<choose>
+			<when test="stat_date != null and stat_date == 'YYYY-MM-DD'.toString()">
+				SELECT LISTAGG(COLLECT_DATE, ',') WITHIN GROUP(ORDER BY COLLECT_DATE )
+				FROM ( SELECT DISTINCT ''''||TO_CHAR(LAST_COLLECT_DATE, 'YYYY-MM-DD')||'''' AS COLLECT_DATE FROM COLLECT_VIDEO_DATA AA 
+				WHERE LAST_COLLECT_DATE BETWEEN TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+				) 
+			</when>
+			<when test="stat_date != null and stat_date == 'YYYY-MM'.toString()">
+				SELECT LISTAGG(COLLECT_DATE, ',') WITHIN GROUP(ORDER BY COLLECT_DATE )
+				FROM ( SELECT DISTINCT ''''||TO_CHAR(LAST_COLLECT_DATE, 'YYYY-MM')||'''' AS COLLECT_DATE FROM COLLECT_VIDEO_DATA AA 
+				WHERE LAST_COLLECT_DATE BETWEEN TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+				) 
+			</when>
+			<when test="stat_date != null and stat_date == 'YYYY'.toString()">
+				SELECT LISTAGG(COLLECT_DATE, ',') WITHIN GROUP(ORDER BY COLLECT_DATE )
+				FROM ( SELECT DISTINCT ''''||TO_CHAR(LAST_COLLECT_DATE, 'YYYY')||'''' AS COLLECT_DATE FROM COLLECT_VIDEO_DATA AA 
+				WHERE LAST_COLLECT_DATE BETWEEN TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 AND TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+				) 
+			</when>
+		</choose>
+ 	</select>	
+	
+	
+  <sql id="search_query">
+		<where>
+			1 = 1
+
+			<if test="search_date_option != null and search_date_option != ''.toString()">
+				<choose>
+					<when test="search_date_option == 'reg_date'" >
+					AND REG_DATE
+						BETWEEN 
+							TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 
+						AND 
+							TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+					</when>
+					<when test="search_date_option == 'last_col_date'">
+					AND LAST_COLLECT_DATE
+						BETWEEN 
+							TO_DATE(#{start_date}, 'YYYY-MM-DD') + 0.00000 
+						AND 
+							TO_DATE(#{end_date}, 'YYYY-MM-DD') + 0.99999
+					</when>
+				</choose>
+			</if>
+			
+			<choose>
+				<when test="mining_active_yn != null and mining_active_yn == 'Y'.toString()">
+					AND ACTIVE_YN = #{mining_active_yn}
+				</when>
+				<when test="mining_active_yn != null and mining_active_yn == 'N'.toString()">
+					AND ACTIVE_YN = #{mining_active_yn}
+				</when>
+			</choose>
+			<choose>
+				<when test="collect_status != null and collect_status == '01'.toString()">
+					AND COLLECT_STATUS = #{collect_status}
+				</when>
+				<when test="collect_status != null and collect_status == '02'.toString()">
+					AND COLLECT_STATUS = #{collect_status}
+				</when>
+				<when test="collect_status != null and collect_status == '03'.toString()">
+					AND COLLECT_STATUS = #{collect_status}
+				</when>
+				<when test="collect_status != null and collect_status == '04'.toString()">
+					AND COLLECT_STATUS = #{collect_status}
+				</when>
+			</choose>
+
+			<if test="search_date_option != null and search_date_option != ''.toString()">
+				<choose>
+					<when test="search_type_option == 'source_name'">
+						AND SOURCE_NAME LIKE '%' || #{searchKeyword} || '%'
+					</when>
+					<when test="search_type_option == 'source_intro'">
+						AND SOURCE_NAME LIKE '%' || #{searchKeyword} || '%'
+					</when>
+				</choose>
+			</if>
+			
+		</where>
+    </sql>
+	
+	
+</mapper>

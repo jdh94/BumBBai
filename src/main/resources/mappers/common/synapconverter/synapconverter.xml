@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYNAP_CONVERTER">
+
+    <select id="GET_VALUE_ATT_FILE" parameterType="hashmap" resultType="hashmap">
+        /* 평가 업로드 첨부파일 정보 조회 */
+        SELECT S_DIR, VIEW_NAME, VIEW_PATH
+          FROM VALUE_ATT_FILE
+         WHERE DATA_YEAR = #{data_year}
+           AND LIB_CODE = #{lib_code}
+           AND VALUE_SPHERE = #{value_sphere}
+           AND FILE_SEQ = #{file_seq}
+           AND SEQ = #{seq}
+    </select>
+
+    <update id="UPDATE_VIEW_INFO_AT_VALUE" parameterType="hashmap">
+        /* 평가 업로드 첨부파일 미리보기 정보 갱신 */
+       UPDATE VALUE_ATT_FILE
+          SET VIEW_NAME = #{view_name, jdbcType=VARCHAR},
+              VIEW_PATH = #{view_path, jdbcType=VARCHAR},
+              VIEW_REAL_PATH = #{view_real_path, jdbcType=VARCHAR}
+        WHERE DATA_YEAR = #{data_year}
+          AND LIB_CODE = #{lib_code}
+          AND VALUE_SPHERE = #{value_sphere}
+          AND FILE_SEQ = #{file_seq}
+          AND SEQ = #{seq}
+    </update>
+
+</mapper>

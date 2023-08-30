@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SYSTEM_CONFIG">
+<select id="GET_SYSTEM_CONFIG" parameterType="map" resultType="map">
+/* 환경설정 리스트 조회*/
+	SELECT
+		ROWNUM,
+		SC.CODE,
+		SC.CODE_GROUP,
+		SC.CONFIG_NAME,
+		SC.WORKER_ID,
+		SC.LAST_UPDATE_DATE,
+		SC.CONFIG_VALUE,
+		SC.CONFIG_DESC
+	FROM
+		(
+			SELECT
+			    CODE,
+			    CODE_GROUP,
+			    CONFIG_NAME,
+			    WORKER_ID,
+			    LAST_UPDATE_DATE,
+			    CONFIG_VALUE,
+			    CONFIG_DESC
+			FROM
+			    SYSTEM_CONFIGURATION
+			<if test="search_text != null and !''.equals(search_text) and !'undefined'.equals(search_text)">
+			WHERE CONFIG_NAME LIKE '%' || #{search_text} || '%' 
+			</if>	    
+			ORDER BY
+			    CODE_GROUP,
+			    CODE ASC
+		) SC
+</select>
+
+<select id="GET_SYSTEM_CONFIG_EXCEL" parameterType="map" resultType="map">
+/* 환경설정 리스트 엑셀 출력*/
+	SELECT
+		ROWNUM,
+		SC.CODE,
+		SC.CODE_GROUP,
+		SC.CONFIG_NAME,
+		SC.WORKER_ID,
+		SC.LAST_UPDATE_DATE,
+		SC.CONFIG_VALUE,
+		SC.CONFIG_DESC
+	FROM
+		(
+			SELECT
+			    CODE,
+			    CODE_GROUP,
+			    CONFIG_NAME,
+			    WORKER_ID,
+			    LAST_UPDATE_DATE,
+			    CONFIG_VALUE,
+			    CONFIG_DESC
+			FROM
+			    SYSTEM_CONFIGURATION
+			ORDER BY
+			    CODE_GROUP,
+			    CODE ASC
+		) SC
+</select>
+
+<update id="SET_SYSTEM_CONFIG" parameterType="map">
+/* 설정 값 변경 */
+	UPDATE SYSTEM_CONFIGURATION 
+	SET CONFIG_VALUE=#{config_value},
+	CONFIG_NAME=#{config_name},
+	CONFIG_DESC=#{config_desc},
+   	WORKER_ID=#{worker_id},
+   	LAST_UPDATE_DATE=SYSDATE
+	WHERE CODE=#{config_code}
+</update>
+<insert id="INSERT_SYSTEM_CONFIG" parameterType="map">
+/*설정 값 입력*/
+INSERT INTO system_configuration (
+        code,
+        code_group,
+        config_name,
+        worker_id,
+        last_update_date,
+        config_value,
+        config_desc
+    ) VALUES (
+        #{config_code},
+        #{config_codegroup},
+        #{config_name},
+        #{worker_id},
+        sysdate,
+        #{config_value},
+        #{config_desc}
+    )
+</insert>
+
+<select id="GET_SYSTEM_CONFIG_CODE_CHK" parameterType="map" resultType="int">
+/*코드값 중복 조회*/
+SELECT COUNT(1) FROM SYSTEM_CONFIGURATION WHERE CODE=#{config_code}
+</select>
+<delete id="DELETE_SYSTEM_CONFIG" parameterType="map">
+/*설정 정보 삭제*/
+delete from system_configuration where code =#{config_code}
+
+</delete>
+
+</mapper>

@@ -6,5 +6,7 @@ import java.util.Map;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface BoardMngService {
-	Map<String, Object> getNoticeBoardList(Map<String, Object> params);
+	void addVisitLog() throws Exception;
+
+//	Map<String, Object> getNoticeBoardList(Map<String, Object> params);
 }

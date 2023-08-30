@@ -28,13 +28,15 @@ public class BoardMngController {
 
 	@GetMapping(value = {"/", "/main"})
 	public ModelAndView BoardPage() throws Exception {
+		System.out.println("main test");
+		this.boardMngService.addVisitLog();
 		return new ModelAndView("/index.jsp");
 	}
 	
-	@GetMapping(value="/search")
-	@ResponseBody
-	public Map<String, Object> searchNoticeBoardList(@RequestParam Map<String, Object> params) throws Exception{
-		return this.boardMngService.getNoticeBoardList(params);
-	}
+//	@GetMapping(value="/search")
+//	@ResponseBody
+//	public Map<String, Object> searchNoticeBoardList(@RequestParam Map<String, Object> params) throws Exception{
+//		return this.boardMngService.getNoticeBoardList(params);
+//	}
 
 }

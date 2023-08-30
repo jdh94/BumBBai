@@ -4,8 +4,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
 
 @Repository
 public class BoardMngDAO {
@@ -14,9 +12,13 @@ public class BoardMngDAO {
 	@Autowired
 	private SqlSessionTemplate template;
 
-	public int updateNoticeBoard(Map<String, Object> params){
-		return template.update(NAME_SPACE + "UPDATE_NOTICE_BOARD", params);
+	public void updateVisitor(){
+		template.update(NAME_SPACE + "UPDATE_VISITOR");
 	}
+
+//	public int updateNoticeBoard(Map<String, Object> params){
+//		return template.update(NAME_SPACE + "UPDATE_NOTICE_BOARD", params);
+//	}
 
 //	public List<Map<String, Object>> getNoticeBoardList(Map<String, Object> params){
 //		return selectList(NAME_SPACE + "GET_NOTICE_BOARD_LIST", params);

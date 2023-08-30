@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="COMMON">
+
+	<sql id="order">
+		<choose>
+			<when test="orderColumn != null and !''.equals(orderColumn)">
+				<choose>
+					<!-- openyard -->
+					<when test="orderColumn == 'TITLE'">TITLE</when>
+					<when test="orderColumn == 'FST_REG_DE'">FST_REG_DE</when>
+					
+					<!-- noticepopup -->
+					<when test="orderColumn == 'POPUP_SJ'">POPUP_SJ</when>
+					<when test="orderColumn == 'NTCE_BGNDE'">NTCE_BGNDE</when>
+					
+					<!-- smsmng -->
+					<when test="orderColumn == 'SL.USER_ID'">SL.USER_ID</when>
+					<when test="orderColumn == 'SL.RECEIVE_CALL'">SL.RECEIVE_CALL</when>
+					<when test="orderColumn == 'SL.SEND_DATE'">SL.SEND_DATE</when>
+					
+					<when test="orderColumn == 'X.LIB_NAME'">X.LIB_NAME</when>
+					<when test="orderColumn == 'X.USER_ID'">X.USER_ID</when>
+					<when test="orderColumn == 'X.FAIL_DATE'">X.FAIL_DATE</when>
+					
+					<!-- actualmnglist -->
+					<when test="orderColumn == 'LOCAL'">LOCAL</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					<when test="orderColumn == 'V_GROUP'">V_GROUP</when>
+					
+					<!-- appealmng -->
+					<when test="orderColumn == 'VALUE_GUBUN_DESC'">VALUE_GUBUN_DESC</when>
+					<when test="orderColumn == 'LOCAL'">LOCAL</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					<when test="orderColumn == 'CNT'">CNT</when>
+					
+					<!-- depfilemnglist -->
+					<when test="orderColumn == 'LIB_GUBUN_NM'">LIB_GUBUN_NM</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					<when test="orderColumn == 'REG_DT'">REG_DT</when>
+					
+					<!-- pointmng -->
+					<when test="orderColumn == 'LIB_VALUE_GROUP'">LIB_VALUE_GROUP</when>
+					<when test="orderColumn == 'V_GROUP'">V_GROUP</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					<when test="orderColumn == 'TOT_POINT'">TOT_POINT</when>
+					
+					<!-- statusmng -->
+					<when test="orderColumn == 'LIB_VALUE_GROUP_DESC'">LIB_VALUE_GROUP_DESC</when>
+					<when test="orderColumn == 'V_GROUP_DESC'">V_GROUP_DESC</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					<when test="orderColumn == 'STATUS'">STATUS</when>
+					<when test="orderColumn == 'PREV_PROGRESS'">PROGRESS</when>
+					<when test="orderColumn == 'PROGRESS'">DECODE(SUM(ANS_CNT), 0, 0, ROUND(SUM(EVAL_CNT) / SUM(ANS_CNT) * 100, 2))</when>
+					
+					<!-- closeliblist -->
+					<when test="orderColumn == 'LIB_GUBUN_NM'">LIB_GUBUN_NM</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					
+					<!-- applylist -->
+					<when test="orderColumn == 'LIB_GUBUN_NM'">LIB_GUBUN_NM</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					
+					<!-- approvelist -->
+					<when test="orderColumn == 'LIB_GUBUN_NM'">LIB_GUBUN_NM</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					
+					<!-- statappliylist -->
+					<when test="orderColumn == 'AFFILIATION'">AFFILIATION</when>
+					
+					<!-- statloglist -->
+					<when test="orderColumn == 'AGENCY'">AGENCY</when>
+					<when test="orderColumn == 'AFFILIATION'">AFFILIATION</when>
+					<when test="orderColumn == 'MBER_NM'">MBER_NM</when>
+					<when test="orderColumn == 'PR_NM'">PR_NM</when>
+					<when test="orderColumn == 'PR_ORGAN'">PR_ORGAN</when>
+					
+					<!-- libmng -->
+					<when test="orderColumn == 'LIB_GUBUN_NM'">LIB_GUBUN_NM</when>
+					<when test="orderColumn == 'LOCAL_NM'">LOCAL_NM</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					
+					<!-- adminmng -->
+					<when test="orderColumn == 'MBER_ID'">MBER_ID</when>
+					<when test="orderColumn == 'MBER_NM'">MBER_NM</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					
+					<!-- delusermng -->
+					<when test="orderColumn == 'MBER_ID'">MBER_ID</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					
+					<!-- inputuser -->
+					<when test="orderColumn == 'USER_NAME'">USER_NAME</when>
+					<when test="orderColumn == 'REG_DE'">REG_DE</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					
+					<!-- usermng -->
+					<when test="orderColumn == 'MBER_ID'">MBER_ID</when>
+					<when test="orderColumn == 'PKG_CRYPTO.decrypt(MBER_NM)'">PKG_CRYPTO.decrypt(MBER_NM)</when>
+					<when test="orderColumn == 'REG_DE'">REG_DE</when>
+					<when test="orderColumn == 'ACCEPT_DE'">ACCEPT_DE</when>
+					<when test="orderColumn == 'AGREE_DE'">AGREE_DE</when>
+					
+					<!-- statisticsmng -->
+					<when test="orderColumn == 'LIB_GUBUN'">LIB_GUBUN</when>
+					<when test="orderColumn == 'LOCAL_NAME'">LOCAL_NAME</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					<when test="orderColumn == 'TEMP1'">TEMP1</when>
+					<when test="orderColumn == 'PERCENT'">PERCENT</when>
+					
+					<!-- awardsmng -->
+					<when test="orderColumn == 'DATA_YEAR'">DATA_YEAR</when>
+					<when test="orderColumn == 'AWARDS_INFO'">AWARDS_INFO</when>
+					<when test="orderColumn == 'LIB_GUBUN_NAME'">LIB_GUBUN_NAME</when>
+					<when test="orderColumn == 'LIB_CODE'">LIB_CODE</when>
+					<when test="orderColumn == 'LIB_NAME'">LIB_NAME</when>
+					<when test="orderColumn == 'LOCAL_NAME'">LOCAL_NAME</when>
+					<when test="orderColumn == 'FOUND_NAME'">FOUND_NAME</when>
+					<when test="orderColumn == 'GROUP_NAME'">GROUP_NAME</when>
+					
+					<otherwise>
+					</otherwise>
+				</choose>
+				<choose>
+					<when test="order == 'DESC'">DESC</when>
+					<otherwise>ASC</otherwise>
+				</choose>
+			</when>
+			<otherwise>
+				${default}
+			</otherwise>
+		</choose>
+	</sql>
+		
+	
+</mapper>
