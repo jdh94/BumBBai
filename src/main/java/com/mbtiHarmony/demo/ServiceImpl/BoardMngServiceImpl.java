@@ -9,25 +9,18 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.text.StringEscapeUtils;
+import com.mbtiHarmony.demo.Dao.BoardMngDAO;
+import com.mbtiHarmony.demo.Service.BoardMngService;
+import com.mbtiHarmony.demo.controller.BoardMngController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.ImmutableMap;
-
-import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
-import kr.go.scourt.clivcms.common.filemanager.FileManagerService;
-import kr.go.scourt.clivcms.common.filemanager.FileManagerType;
-import kr.go.scourt.clivcms.common.validation.ChaeumValidation;
-
 @Service
-public class BoardMngServiceImpl extends EgovAbstractServiceImpl implements BoardMngService {
+public class BoardMngServiceImpl implements BoardMngService {
+
 	@Autowired
 	private BoardMngDAO boardmngDAO;
 
@@ -38,17 +31,21 @@ public class BoardMngServiceImpl extends EgovAbstractServiceImpl implements Boar
     }
 
 	@Override
-	public Map<String, Object> getNoticeBoardInfo(String noticeId){
-		Map<String, Object> notice = new HashMap<String, Object>();
-		
-		notice = this.boardmngDAO.getNoticeBoardInfo(noticeId);
-		
-		return parseNoticeDetail(notice);
+	public Map<String, Object> getNoticeBoardList(Map<String, Object> params) {
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			int noticeCnt = boardmngDAO.getNoticeBoardCount(params);
+			List<Map<String, Object>> noticeList = boardmngDAO.getNoticeBoardList(params);
+
+			resultMap.put("noticeCnt", noticeCnt);
+			resultMap.put("noticeList", noticeList);
+		}catch(Exception e) {
+			logger.error("GET_NOTICE_BOARD_LIST_ERROR :: ", e);
+			resultMap.put("reulst", "error");
+		}
+
+		return resultMap;
 	}
-	
-
-
-
 
 }
 

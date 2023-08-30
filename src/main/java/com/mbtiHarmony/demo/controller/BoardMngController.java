@@ -1,13 +1,8 @@
 package com.mbtiHarmony.demo.controller;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.mbtiHarmony.demo.Service.BoardMngService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,19 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import kr.go.scourt.clivcms.common.excel.ExcelExportService;
-import kr.go.scourt.clivcms.common.session.SessionListener;
-
 @RestController
 @RequestMapping(value = "/mbtiHarmony")
 public class BoardMngController {
-	
 	@Autowired
 	private BoardMngService boardMngService;
 
 	@GetMapping(value = {"/", "/main"})
 	public ModelAndView BoardPage() throws Exception {
-		return new ModelAndView("/main/index.jsp").addObject("test", "test");
+		return new ModelAndView("/index.jsp");
 	}
 	
 	@GetMapping(value="/search")
