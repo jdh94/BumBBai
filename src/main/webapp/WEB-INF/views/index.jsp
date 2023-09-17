@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 		<div class="container">
@@ -70,3 +71,12 @@
 		<input type="hidden" id="manager_grade" value="${_MANAGER_GRADE_}"/>
 
 <script type="application/javascript" src="<c:url value="/js/views/manager/boardmng/boardmng.js"/>"></script>
+=======
+
+<html>
+    <h1>메인화면</h1>
+    <h2>fe be 서버 분리</h2>
+
+</html>
+
+>>>>>>> 331dbf6e7284c3183c8246dd4604096215f5c260
