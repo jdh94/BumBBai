@@ -1,8 +1,6 @@
-package com.mbtiHarmony.demo.Repository;
+package com.BumBBai.Repository;
 
-import java.util.Optional;
-
-import com.mbtiHarmony.demo.Model.SystemLog;
+import com.BumBBai.Model.SystemLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

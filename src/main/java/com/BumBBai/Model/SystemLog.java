@@ -1,4 +1,4 @@
-package com.mbtiHarmony.demo.Model;
+package com.BumBBai.Model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
