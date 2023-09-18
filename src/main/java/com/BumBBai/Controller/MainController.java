@@ -17,7 +17,7 @@ public class MainController {
 	public ModelAndView BoardPage() throws Exception {
 		System.out.println("main test");
 		this.mainService.addVisitLog();
-		return new ModelAndView("index.jsp");
+		return new ModelAndView("index");
 	}
 	
 //	@GetMapping(value="/search")

@@ -1,18 +1,12 @@
+<<<<<<< HEAD
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<html>
-    <head>
-        <script type="application/javascript" src="/js/views/BumBBai/index.js"></script>
-        <!-- css 추가 -->
-    </head>
-    <body>
+
 		<div class="container">
 			<ol class="location">
-				<li>뿜빠이 메인화면</li>
-				<li>제일 많이 낸 사람</li>
-				<li>계산화면</li>
+				<li>HOME</li>
+				<li>게시판관리</li>
+				<li>공지사항</li>
             </ol>
-
-
 
 			<h2 class="h2" id="content">공지사항</h2>
 				<form id="searchForm" name="searchForm" method="GET" class="searchCondition">
@@ -65,8 +59,24 @@
 				</select>
 				<div id="paging" class="paging"></div>
 			</div>
+				<div class="btnArea">
+	          	<c:if test="${_MANAGER_GRADE_ ne '01' }">
+					<input type="button" class="btn pri" value="입력" id="addNoticeBtn"/>
+				</c:if>
+					<input type="button" class="btn" value="엑셀다운로드" id="exportExcel">
+				</div>
+
 		</div>
 
-    </body>
+		<input type="hidden" id="manager_grade" value="${_MANAGER_GRADE_}"/>
+
+<script type="application/javascript" src="<c:url value="/js/views/manager/boardmng/boardmng.js"/>"></script>
+=======
+
+<html>
+    <h1>메인화면</h1>
+    <h2>fe be 서버 분리</h2>
+
 </html>
 
+>>>>>>> 331dbf6e7284c3183c8246dd4604096215f5c260
