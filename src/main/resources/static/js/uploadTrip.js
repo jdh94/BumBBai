@@ -19,15 +19,15 @@ document.addEventListener("DOMContentLoaded", function() {
 		})
 		
 		let dataObject = {
-			"tripName" : tripName,
+			"tripname" : tripName,
 			"memberList" : paramMem
 		};
-		
+
 		// ajax 전송
 	    let xhr = new XMLHttpRequest();
 	    xhr.open('POST', '/api/uploadTrip/insert', true);
-		xhr.setRequestHeader("ajax-request", "true");
-	    xhr.send();	    
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify(dataObject));
 	    xhr.onload = () => {
 			if(xhr.status == 200){
 				console.log(xhr.response);
@@ -35,6 +35,22 @@ document.addEventListener("DOMContentLoaded", function() {
 				console.log(xhr.response);
 			}
 		}
+
+//        $.ajax({
+//            // 회원가입 수행요청
+//            type: "POST",
+//            url: "/api/uploadTrip/insert",
+//            data: JSON.stringify(dataObject), // http body데이터
+//            contentType: "application/json; charset=utf-8", // body데이터가 어떤 타입인지(MIME)
+//            dataType: "json" // 요청을 서버로해서 응답이 왔을 때 기본적으로 모든것이 String(버퍼로 오기 때문) 생긴게 json이라면 javascript오브젝트로 변경
+//        }).done(function(resp) {
+//            alert("글쓰기가 완료되었습니다.");
+//            // console.log(resp);
+//            location.href = "/";
+//        }).fail(function(error) {
+//            alert(JSON.stringify(error));
+//        }); // ajax통신을 이용해서 3개의 데이터를 json으로 변경하여 inser요청
+
 	    
 //        xhr.open("POST", "/api/uploadTrip/insert?" + jsonParamSerialize(dataObject), true);
 //		xhr.setRequestHeader("ajax-request", "true");

@@ -20,7 +20,7 @@ public class MainService {
 	// - TRIPNAME
 	// EXPANSE
 	@Transactional
-	public void insertTrip(Trip trip) { 
+	public void insertTrip(Trip trip) {
 		mainRepository.save(trip);
 	} 
 	
