@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		
 		let dataObject = {
 			"tripname" : tripName,
-			"memberList" : paramMem
+			"attendantname" : paramMem
 		};
 
 		// ajax 전송
@@ -31,7 +31,9 @@ document.addEventListener("DOMContentLoaded", function() {
 	    xhr.onload = () => {
 			if(xhr.status == 200){
 				console.log(xhr.response);
+				location.href = "/main/tripDetail/" + xhr.data;
 			}else{
+				alert(xhr.response);
 				console.log(xhr.response);
 			}
 		}

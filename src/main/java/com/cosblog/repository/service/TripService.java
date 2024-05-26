@@ -1,28 +1,53 @@
 package com.cosblog.repository.service;
 
+import com.cosblog.dto.InsertTripRequestDto;
+import com.cosblog.model.Attendant;
+import com.cosblog.repository.AttendantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.cosblog.model.Trip;
-import com.cosblog.repository.MainRepository;
+import com.cosblog.repository.TripRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 //스프링이 컴포넌트 스캔을 통해서  Bean에 등록해줌. IoC를 해준다.
 @Service
-public class MainService {
-	
+public class TripService {
+
 	@Autowired
-	private MainRepository mainRepository;
-	
-	// TRIP
-	// - ATTENDANCE
-	// - TRIPNAME
-	// EXPANSE
+	private TripRepository tripRepository;
+	@Autowired
+	private AttendantRepository attendantRepository;
+
 	@Transactional
-	public void insertTrip(Trip trip) {
-		mainRepository.save(trip);
-	} 
+	public Long insertTrip(InsertTripRequestDto insertTripRequestDto) {
+
+		Trip trip = new Trip();
+		trip.setTripname(insertTripRequestDto.getTripname());
+
+		tripRepository.save(trip);
+
+		Trip tr = tripRepository.findByTripname(insertTripRequestDto.getTripname()).orElse(null);
+		long trId = tr.getTripid();
+
+		// list 형태로 저장
+		ArrayList<String> arrayList = insertTripRequestDto.getAttendantname();
+		ArrayList<Attendant> attendantList = new ArrayList<>();
+		arrayList.forEach( atd -> {
+			Attendant attendant = new Attendant();
+			attendant.setAttendantname(atd);
+			attendant.setTripid(trId);
+			attendantList.add(attendant);
+		});
+
+		attendantRepository.saveAll(attendantList);
+
+		return trId;
+	}
 	
 //	@Transactional(readOnly = true)
 //	public Page<Board> 글목록(Pageable pageable){

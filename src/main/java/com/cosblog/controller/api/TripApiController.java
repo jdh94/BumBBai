@@ -1,30 +1,56 @@
 package com.cosblog.controller.api;
 
+import com.cosblog.dto.InsertTripRequestDto;
+import com.cosblog.model.Attendant;
+import com.cosblog.repository.service.AttendantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosblog.dto.ResponseDto;
 import com.cosblog.model.Trip;
-import com.cosblog.repository.service.MainService;
+import com.cosblog.repository.service.TripService;
 
 @RestController
-public class MainApiController {
+public class TripApiController {
 
 	@Autowired
-	private MainService mainService;
-	
+	private TripService tripService;
+
+	@Autowired
+	private AttendantService attendantService;
+
 	@PostMapping("/api/uploadTrip/insert")
-//	public ResponseDto<Integer> save(@RequestBody Trip trip, @AuthenticationPrincipal PrincipalDetail principal) { 
-	public ResponseDto<Integer> save(@RequestBody Trip trip) { 
+	public ResponseDto<Integer> save(@RequestBody InsertTripRequestDto insertTripRequestDto) {
 		System.out.println("insert trip");
-		mainService.insertTrip(trip);
-		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+		System.out.println(insertTripRequestDto);
+
+		long tripId = tripService.insertTrip(insertTripRequestDto);
+		int intTripId = (int)tripId;
+
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), intTripId);
 	}
-	
-	
+
+	@PostMapping("/api/tripDetail/{tripid}")
+	public ResponseDto<Integer> tripDetailApi(@PathVariable("tripid") long tripid) {
+
+		tripService.getTripDetail(tripid);
+
+		System.out.println("insert trip");
+		System.out.println(insertTripRequestDto);
+
+		long tripId = tripService.insertTrip(insertTripRequestDto);
+		int intTripId = (int)tripId;
+
+		return new ResponseDto<Integer>(HttpStatus.OK.value(), intTripId);
+	}
+
+
+
+
 //	@DeleteMapping("/api/board/{id}")
 //	public ResponseDto<Integer> deleteById(@PathVariable int id){
 //		boardService.글삭제하기(id);

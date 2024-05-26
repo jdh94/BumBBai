@@ -16,19 +16,21 @@ import java.sql.Timestamp;
 @Builder
 @Entity
 public class Attendant {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-	private Long seq;
-	
+	private Long attendantid;
+
+	@Column
+	@JoinColumn(name="tripid")
+	private Long tripid;
+
 	@Column(nullable = true, length = 10)
-	private String tripname;
+	private String attendantname;
 
 	@CreationTimestamp
 	private Timestamp createdate;
 
-//	@Column(nullable = true, length = 20)
-//	private String attendant;
 
 	//eager 바로 가져와준다.
 //	@ManyToOne(fetch = FetchType.EAGER) // many = many, User = One
