@@ -2,22 +2,22 @@ document.addEventListener("DOMContentLoaded", function() {
 	document.getElementById("addMemberBtn").addEventListener('click', function(event) {
 		let memberName = document.getElementById("memberName").value;
 		let memberList = document.getElementById("memberList");
-		
+
 		let tmpHtml = document.createElement("span");
 		tmpHtml.innerText = memberName;
-		
+
 		memberList.append(tmpHtml);
     });
-    
+
 	document.getElementById("addTripBtn").addEventListener('click', function(event) {
 		let tripName = document.getElementById("tripName").value;
 		let memberList = document.getElementById("memberList").childNodes;
-		
+
 		let paramMem = [];
 		memberList.forEach((data) => {
 			paramMem.push(data.innerText);
 		})
-		
+
 		let dataObject = {
 			"tripname" : tripName,
 			"attendantname" : paramMem
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	    xhr.onload = () => {
 			if(xhr.status == 200){
 				console.log(xhr.response);
-				location.href = "/main/tripDetail/" + xhr.data;
+				location.href = "/main/tripDetail/" + xhr.response;
 			}else{
 				alert(xhr.response);
 				console.log(xhr.response);
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
 //            alert(JSON.stringify(error));
 //        }); // ajax통신을 이용해서 3개의 데이터를 json으로 변경하여 inser요청
 
-	    
+
 //        xhr.open("POST", "/api/uploadTrip/insert?" + jsonParamSerialize(dataObject), true);
 //		xhr.setRequestHeader("ajax-request", "true");
 //	    xhr.send();
@@ -66,6 +66,6 @@ document.addEventListener("DOMContentLoaded", function() {
 //		}
 
 	});
-    
+
 });
 

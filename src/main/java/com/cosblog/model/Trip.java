@@ -44,9 +44,13 @@ public class Trip {
 	@CreationTimestamp
 	private Timestamp createdate;
 
-	@OneToMany(fetch = FetchType.EAGER) // many = many, User = One
+	@OneToMany
 	@JoinColumn(name="tripid")
 	private List<Attendant> attendant;
+
+	@OneToMany // many = many, User = One
+	@JoinColumn(name="tripid")
+	private List<Expense> expense;
 
 //	@Column(nullable = true, length = 20)
 //	private String attendant;

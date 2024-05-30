@@ -26,8 +26,10 @@ public class TripController {
 	}
 
 	@GetMapping("/main/tripDetail/{tripid}")
-	public String tripDetail(@PathVariable("tripid") long tripid) {
+	public String tripDetail(@PathVariable("tripid") long tripid, Model model) {
 		System.out.println("여행상세 페이지 호출");
+		System.out.println(tripService.getTripDetail(tripid));
+		model.addAttribute("trip", tripService.getTripDetail(tripid));
 
 		return "main/tripDetail";
 	}

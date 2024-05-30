@@ -5,10 +5,7 @@ import com.cosblog.model.Attendant;
 import com.cosblog.repository.service.AttendantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cosblog.dto.ResponseDto;
 import com.cosblog.model.Trip;
@@ -24,28 +21,24 @@ public class TripApiController {
 	private AttendantService attendantService;
 
 	@PostMapping("/api/uploadTrip/insert")
-	public ResponseDto<Integer> save(@RequestBody InsertTripRequestDto insertTripRequestDto) {
+	public long save(@RequestBody InsertTripRequestDto insertTripRequestDto) {
 		System.out.println("insert trip");
 		System.out.println(insertTripRequestDto);
 
 		long tripId = tripService.insertTrip(insertTripRequestDto);
-		int intTripId = (int)tripId;
 
-		return new ResponseDto<Integer>(HttpStatus.OK.value(), intTripId);
+		return tripId;
 	}
 
 	@PostMapping("/api/tripDetail/{tripid}")
-	public ResponseDto<Integer> tripDetailApi(@PathVariable("tripid") long tripid) {
+	public Trip tripDetailApi(@PathVariable("tripid") long tripid) {
 
-		tripService.getTripDetail(tripid);
+		Trip trip = tripService.getTripDetail(tripid);
 
-		System.out.println("insert trip");
-		System.out.println(insertTripRequestDto);
+		System.out.println("trip api call");
+		System.out.println(trip);
 
-		long tripId = tripService.insertTrip(insertTripRequestDto);
-		int intTripId = (int)tripId;
-
-		return new ResponseDto<Integer>(HttpStatus.OK.value(), intTripId);
+		return trip;
 	}
 
 

@@ -31,10 +31,11 @@ public class TripService {
 
 		tripRepository.save(trip);
 
-		Trip tr = tripRepository.findByTripname(insertTripRequestDto.getTripname()).orElse(null);
+		Trip tr = tripRepository.findByTripid(trip.getTripid()).orElse(null);
 		long trId = tr.getTripid();
 
 		// list 형태로 저장
+		// 참여자 저장
 		ArrayList<String> arrayList = insertTripRequestDto.getAttendantname();
 		ArrayList<Attendant> attendantList = new ArrayList<>();
 		arrayList.forEach( atd -> {
@@ -49,11 +50,11 @@ public class TripService {
 		return trId;
 	}
 	
-//	@Transactional(readOnly = true)
-//	public Page<Board> 글목록(Pageable pageable){
-//		return boardRepository.findAll(pageable);
-//	}
-//	
+	@Transactional(readOnly = true)
+	public Trip getTripDetail(long tripid){
+		return tripRepository.findByTripid(tripid).orElse(null);
+	}
+//
 //	@Transactional(readOnly = true)
 //	public Board 글상세보기(int id) {
 //		return boardRepository.findById(id)
