@@ -1,5 +1,6 @@
 package com.cosblog.controller.api;
 
+import com.cosblog.dto.DetailTripRequestDto;
 import com.cosblog.dto.InsertTripRequestDto;
 import com.cosblog.dto.ResponseDto;
 import com.cosblog.model.Attendant;
@@ -18,15 +19,13 @@ public class ExpenseApiController {
 	@Autowired
 	private ExpenseService expenseService;
 	
-/*
-	@PostMapping("/api/expense/insert")
-	public ResponseDto<Integer> save(InsertExpenseRequestDto insertExpenseRequestDto) {
-		System.out.println("insert expense");
-
-		long tripId = tripService.insertTrip(insertTripRequestDto);
-
-		return tripId;
-	}
-*/
+//	@PostMapping("/api/expense/insert")
+//	public ResponseDto<Integer> save(DetailTripRequestDto detailTripRequestDto) {
+//		System.out.println("insert expense");
+//
+//		long tripId = tripService.insertTrip(insertTripRequestDto);
+//
+//		return tripId;
+//	}
 
 }

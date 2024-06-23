@@ -14,9 +14,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if(xhr.status == 200){
             let trip = JSON.parse(xhr.response);
             console.log(trip);
-            document.querySelector("#tripname").innerHTML = trip.tripname;
+            document.querySelector("#tripName").innerHTML = trip.tripname;
             document.querySelector("#attendantName").innerHTML = JSON.stringify(trip.attendant);
             document.querySelector("#expanseList").innerHTML = JSON.stringify(trip.expense);
+
+
         }else{
             alert(xhr.response);
             console.log(xhr.response);
