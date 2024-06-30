@@ -65,7 +65,8 @@
 				</c:if>
 					<input type="button" class="btn" value="엑셀다운로드" id="exportExcel">
 				</div>
-
+				<img src="C:\Users\pitsd\Downloads\제목 없음.jpg"/>
+				<span type="hidden" id="aade" value="${file}"/>
 		</div>
 
 		<input type="hidden" id="manager_grade" value="${_MANAGER_GRADE_}"/>

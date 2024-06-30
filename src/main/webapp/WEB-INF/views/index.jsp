@@ -22,7 +22,7 @@
 				<li class="page-item"><a class="page-link" href="?page=${boards.number-1}">Previous</a></li>
 			</c:otherwise>
 		</c:choose>
-		
+
 		<c:choose>
 			<c:when test="${boards.last}">
 				<li class="page-item disabled"><a class="page-link" href="?page=${boards.number+1}">Next</a></li>
@@ -32,6 +32,10 @@
 			</c:otherwise>
 		</c:choose>
 	</ul>
+
+	<img src="C:\Users\pitsd\Downloads\제목 없음.jpg" width="500" height="500"/>
+	<span type="hidden" id="aade" value="${fileImage}"/>
+
 
 </div>
 
