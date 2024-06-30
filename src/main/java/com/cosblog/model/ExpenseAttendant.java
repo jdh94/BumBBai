@@ -8,7 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 
 @Data
@@ -16,27 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Expense {
+public class ExpenseAttendant {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
 	private Long expenseid;
 
-//	@Column
-//	@JoinColumn(name="tripid")
-//	private Long tripid;
-
 	@Column
-	private Long expenseprice;
-
-	@Column(nullable = true, length = 10)
-	private String expensename;
+	private Long Attendantid;
 
 	@CreationTimestamp
 	private Timestamp createdate;
-
-	@OneToMany
-	@JoinColumn(name="attendantid")
-	private List<ExpenseAttendant> attendantid;
-
 }
