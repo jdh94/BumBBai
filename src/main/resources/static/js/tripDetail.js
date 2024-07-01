@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector("#tripName").innerHTML = trip.tripname;
             document.querySelector("#attendantName").innerHTML = JSON.stringify(trip.attendant);
             document.querySelector("#expanseList").innerHTML = JSON.stringify(trip.expense);
-
-
         }else{
             alert(xhr.response);
             console.log(xhr.response);
