@@ -28,9 +28,10 @@ public class ExpenseApiController {
 		System.out.println("insert expense");
 
 		Expense expense = detailTripRequestDto.getExpense();
-		long tripId = expenseService.insertExpense(expense);
+		expenseService.insertExpense(expense);
 
-		return tripId;
+		//
+		return 1;
 	}
 
 }

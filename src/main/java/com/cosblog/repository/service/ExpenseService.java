@@ -15,9 +15,8 @@ public class ExpenseService {
 	private ExpenseRepository expenseRepository;
 
 	@Transactional
-	public long insertExpense(Expense expense) {
+	public void insertExpense(Expense expense) {
 		expenseRepository.save(expense);
-		return 0;
 	}
 
 //	@Transactional(readOnly = true)
