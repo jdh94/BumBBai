@@ -3,7 +3,7 @@ package com.cosblog.test;
 import java.util.List;
 import java.util.function.Supplier;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
