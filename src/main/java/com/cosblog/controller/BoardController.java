@@ -31,35 +31,12 @@ public class BoardController {
 		// GetMapping의 "/"를 통해 설정되있는 포트값 주소의 + "/"인 url으로 매핑
 		System.out.println("홈호출");
 
-		try {
-			File file = new File("C:\\Users\\pitsd\\Downloads", "새로운_파일.jpg");
-			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-			writer.write("cocococococo");
-			writer.close();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
-		try {
-			File file = new File("C:\\Users\\pitsd\\Downloads", "제목 없음.jpg");
-			BufferedReader br;
-			String retStr = "";
-
-			br = new BufferedReader(new FileReader(file));
-			model.addAttribute("fileImage", br.read());
-
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-
 		return "index";
 	}
 
 	@GetMapping("/board/{id}")
 	public String findById(@PathVariable int id, Model model) {
 		model.addAttribute("board", boardService.글상세보기(id));
-
 
 		return "board/detail";
 	}
