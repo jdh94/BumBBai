@@ -17,7 +17,7 @@ public class AttendantApiController {
 	@Autowired
 	private AttendantService AttendantService;
 
-	@PostMapping("/api/uploadTrip/insert")
+	@PostMapping("/api/uploadAttendant/insert")
 	public ResponseDto<Integer> save(@RequestBody Attendant attendant) {
 		System.out.println("insert Attendant");
 		AttendantService.insertAttendant(attendant);
