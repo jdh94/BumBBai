@@ -1,5 +1,7 @@
 package com.cosblog.repository.service.validation;
 
+import org.springframework.stereotype.Service;
+
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
