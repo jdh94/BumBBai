@@ -26,7 +26,7 @@ public class BoardController {
 	//	@AuthenticationPrincipal PrincipalDetail principal
 	@GetMapping({"","/"})
 	public String index(Model model, @PageableDefault(size=3, sort="id", direction = Sort.Direction.DESC) Pageable pageable) {
-		model.addAttribute("boards", boardService.글목록(pageable));
+		model.addAttribute("boards", boardService.boardList(pageable));
 		// yml설정값 prefix : "/WEB-INF/views/" + return 값 "index" + yml설정값 suffix : ".jsp" 의 경로를 찾아줌
 		// GetMapping의 "/"를 통해 설정되있는 포트값 주소의 + "/"인 url으로 매핑
 		System.out.println("홈호출");
@@ -36,7 +36,7 @@ public class BoardController {
 
 	@GetMapping("/board/{id}")
 	public String findById(@PathVariable int id, Model model) {
-		model.addAttribute("board", boardService.글상세보기(id));
+		model.addAttribute("board", boardService.boardInfo(id));
 
 		return "board/detail";
 	}
@@ -49,7 +49,7 @@ public class BoardController {
 
 	@GetMapping("/board/{id}/updateForm")
 	public String updataForm(@PathVariable int id, Model model) {
-		model.addAttribute("board", boardService.글상세보기(id));
+		model.addAttribute("board", boardService.boardInfo(id));
 		return "board/updateForm";
 	}
 

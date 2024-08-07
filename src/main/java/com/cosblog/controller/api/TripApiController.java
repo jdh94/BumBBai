@@ -43,13 +43,13 @@ public class TripApiController {
 
 //	@DeleteMapping("/api/board/{id}")
 //	public ResponseDto<Integer> deleteById(@PathVariable int id){
-//		boardService.글삭제하기(id);
+//		boardService.boardDelete(id);
 //		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 //	}
 //
 //	@PutMapping("/api/board/{id}")
 //	public ResponseDto<Integer> update(@PathVariable int id, @RequestBody Board board){
-//		boardService.글수정하기(id, board);
+//		boardService.boardUpdate(id, board);
 //		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 //	}
 //
@@ -59,13 +59,13 @@ public class TripApiController {
 //	@PostMapping("/api/board/{boardId}/reply")
 //	public ResponseDto<Integer> replySave(@RequestBody ReplySaveRequestDto replySaveRequestDto) { // username, password, email
 //
-//		boardService.댓글쓰기(replySaveRequestDto);
+//		boardService.replyWrite(replySaveRequestDto);
 //		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 //	}
 //
 //	@DeleteMapping("/api/board/{boardId}/reply/{replyId}")
 //	public ResponseDto<Integer> replyDelete(@PathVariable int replyId){
-//		boardService.댓글삭제(replyId);
+//		boardService.replyDelete(replyId);
 //		return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
 //	}
 }
