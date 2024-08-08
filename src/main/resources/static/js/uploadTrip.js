@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 
 //        $.ajax({
-//            // 회원가입 수행요청
+//            // insertUser 수행요청
 //            type: "POST",
 //            url: "/api/uploadTrip/insert",
 //            data: JSON.stringify(dataObject), // http body데이터

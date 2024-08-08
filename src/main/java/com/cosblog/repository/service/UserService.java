@@ -26,7 +26,7 @@ public class UserService {
 	private BCryptPasswordEncoder encoder;
 
 	@Transactional(readOnly = true)
-	public User 회원찾기(String username) {
+	public User getUser(String username) {
 		User user = userRepository.findByUsername(username).orElseGet(() -> {
 			return new User();
 		});
@@ -34,7 +34,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public void 회원가입(User user) {
+	public void insertUser(User user) {
 		String rawPassword = user.getPassword(); // 1234 원문
 		String encPassword = encoder.encode(rawPassword); // 해쉬
 		user.setPassword(encPassword);
@@ -43,7 +43,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public void 회원수정(User user) {
+	public void updateUser(User user) {
 		// 수정시에서는 영속성 컨텍스트 유저 오브젝트를 영속화 시키고, 영속화된 User오브젝트를 수정
 		// select를 통해 User오브텍트를 DB로 가져와 영속화 시키고
 		// 영속화된 오브젝트를 변경하여 자동으로 DB에 update문을 날려주는 형태로 수정
@@ -59,7 +59,7 @@ public class UserService {
 			persistance.setEmail(user.getEmail());
 		}
 		
-		// 회원수정 함수 종료시 = 서비스 종료 = 트랜잭션 종료 = commit이 자동으로 이루어짐
+		// updateUser 함수 종료시 = 서비스 종료 = 트랜잭션 종료 = commit이 자동으로 이루어짐
 		// 영속화된 persistance 객체가 변화가 감지되면 더티체킹이 되어 update문을 날려줌.
 	}
 
