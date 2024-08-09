@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="99cbc88a-cd9a-4fe4-8235-5f9625047f45" name="Changes" comment="메소드명 변경 작업(한글 -&gt; 영문)" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" show_ignored="true" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="demo" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="testBranch" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="testBranch" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;jdh94&quot;
+  }
+}</component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/jdh94/BumBBai.git&quot;,
+    &quot;accountId&quot;: &quot;7e6ab6ef-88be-4315-89b3-6c2ad8ac4fe2&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2UCCZNIRpvgt29OPC6HkPMSqNQU" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.BlogApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.BBumBBai [dependencies].executor&quot;: &quot;Debug&quot;,
+    &quot;Gradle.BBumBBai.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Build BBumBBai.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.cosblog [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.cosblog [install].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;Spring Boot.BlogApplication (1).executor&quot;: &quot;Debug&quot;,
+    &quot;Spring Boot.BlogApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/workspace/demo&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\workspace\projectPakages\BBumBBai\src\main\java\com\cosblog\repository\service" />
+      <recent name="C:\workspace\projectPakages\BBumBBai\src\main\java\com\cosblog" />
+      <recent name="C:\workspace\projectPakages\BBumBBai\src\main\resources\static\js" />
+      <recent name="C:\workspace\projectPakages\BBumBBai\src\main\webapp\WEB-INF\views\main" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.cosblog.repository" />
+      <recent name="com.cosblog.model" />
+      <recent name="com.cosblog.config" />
+      <recent name="com.cosblog.repository.service" />
+      <recent name="com.cosblog.controller.api" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.BlogApplication">
+    <configuration name="BlogApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cosblog.BlogApplication" />
+      <module name="blog" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cosblog.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BBumBBai [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="dependencies" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="BBumBBai" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list />
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="All in blog (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="blog" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in blog (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="blog" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in blog" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="blog" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="cosblog" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="cosblog" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlogApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="demo.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.cosblog.BlogApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cosblog.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.BlogApplication" />
+      <item itemvalue="Gradle.BBumBBai" />
+      <item itemvalue="Gradle.BBumBBai [dependencies]" />
+      <item itemvalue="JUnit.All in blog" />
+      <item itemvalue="JUnit.All in blog (1)" />
+      <item itemvalue="Spring Boot.BlogApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.BlogApplication" />
+        <item itemvalue="Gradle.BBumBBai [dependencies]" />
+        <item itemvalue="Gradle.BBumBBai" />
+        <item itemvalue="Application.BlogApplication" />
+        <item itemvalue="JUnit.All in blog (1)" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="99cbc88a-cd9a-4fe4-8235-5f9625047f45" name="Changes" comment="Switch project structure from Maven to Gradle&#10;&#10;Deleted Maven configuration files, including .classpath, .project, and pom.xml. Updated JSP to include headers and a simpler pagination structure. Renamed an API endpoint for better clarity." />
+      <created>1692434234628</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1692434234628</updated>
+      <workItem from="1719067836536" duration="3011000" />
+      <workItem from="1719140628506" duration="17661000" />
+      <workItem from="1719752584753" duration="681000" />
+      <workItem from="1719753281374" duration="8481000" />
+      <workItem from="1720121759269" duration="10683000" />
+      <workItem from="1720363658213" duration="4204000" />
+      <workItem from="1722434646280" duration="9407000" />
+      <workItem from="1722811000300" duration="3627000" />
+      <workItem from="1722955669276" duration="4051000" />
+    </task>
+    <task id="LOCAL-00001" summary="trip 테이블 추가">
+      <created>1716434691730</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716434691730</updated>
+    </task>
+    <task id="LOCAL-00002" summary="테이블명 변경">
+      <created>1716713503075</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1716713503075</updated>
+    </task>
+    <task id="LOCAL-00003" summary="클래스 수정">
+      <created>1717080767264</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1717080767264</updated>
+    </task>
+    <task id="LOCAL-00004" summary="프론트 에러수정">
+      <created>1718721361902</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1718721361902</updated>
+    </task>
+    <task id="LOCAL-00005" summary="expense추가">
+      <created>1718894514464</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1718894514465</updated>
+    </task>
+    <task id="LOCAL-00006" summary="브랜치 따기전 임시저장">
+      <option name="closed" value="true" />
+      <created>1719183678062</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1719183678062</updated>
+    </task>
+    <task id="LOCAL-00007" summary="브랜치 따기전 임시저장">
+      <option name="closed" value="true" />
+      <created>1719183721917</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1719183721917</updated>
+    </task>
+    <task id="LOCAL-00008" summary="브랜치 따기전 임시저장">
+      <option name="closed" value="true" />
+      <created>1719269607184</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1719269607184</updated>
+    </task>
+    <task id="LOCAL-00009" summary="브랜치 따기전 임시저장">
+      <option name="closed" value="true" />
+      <created>1719269698142</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1719269698142</updated>
+    </task>
+    <task id="LOCAL-00010" summary="expense add">
+      <option name="closed" value="true" />
+      <created>1719584671471</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1719584671471</updated>
+    </task>
+    <task id="LOCAL-00011" summary="file Exam">
+      <option name="closed" value="true" />
+      <created>1719757399269</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1719757399269</updated>
+    </task>
+    <task id="LOCAL-00012" summary="file Exam">
+      <option name="closed" value="true" />
+      <created>1719757490612</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1719757490612</updated>
+    </task>
+    <task id="LOCAL-00013" summary="error solve">
+      <option name="closed" value="true" />
+      <created>1719845531940</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1719845531940</updated>
+    </task>
+    <task id="LOCAL-00014" summary="update expense-insert">
+      <option name="closed" value="true" />
+      <created>1719930437579</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1719930437579</updated>
+    </task>
+    <task id="LOCAL-00015" summary="gradle, yml 세팅">
+      <option name="closed" value="true" />
+      <created>1720365981655</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1720365981655</updated>
+    </task>
+    <task id="LOCAL-00016" summary="테스트 코드 삭제">
+      <option name="closed" value="true" />
+      <created>1720446903849</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1720446903849</updated>
+    </task>
+    <task id="LOCAL-00017" summary="깃 이그노어 추가">
+      <option name="closed" value="true" />
+      <created>1722436318753</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1722436318754</updated>
+    </task>
+    <task id="LOCAL-00018" summary="깃 서비스 추가">
+      <option name="closed" value="true" />
+      <created>1722609379252</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1722609379252</updated>
+    </task>
+    <task id="LOCAL-00019" summary="공통 서비스 추가">
+      <option name="closed" value="true" />
+      <created>1722609412761</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1722609412761</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Switch project structure from Maven to Gradle&#10;&#10;Deleted Maven configuration files, including .classpath, .project, and pom.xml. Updated JSP to include headers and a simpler pagination structure. Renamed an API endpoint for better clarity.">
+      <option name="closed" value="true" />
+      <created>1722610894529</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1722610894529</updated>
+    </task>
+    <task id="LOCAL-00021" summary="프로젝트 설정 변화">
+      <option name="closed" value="true" />
+      <created>1722811497739</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1722811497739</updated>
+    </task>
+    <task id="LOCAL-00022" summary="메소드명 변경 작업">
+      <option name="closed" value="true" />
+      <created>1722955740230</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1722955740230</updated>
+    </task>
+    <task id="LOCAL-00023" summary="메소드명 변경 작업">
+      <option name="closed" value="true" />
+      <created>1723040532149</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1723040532149</updated>
+    </task>
+    <task id="LOCAL-00024" summary="메소드명 변경 작업(한글 -&gt; 영문)">
+      <option name="closed" value="true" />
+      <created>1723127527906</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1723127527906</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="51" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="114" />
+                  <entry key="Table.GitHub.CommitStatus.ColumnIdWidth" value="61" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="trip 테이블 추가" />
+    <MESSAGE value="테이블명 변경" />
+    <MESSAGE value="클래스 수정" />
+    <MESSAGE value="프론트 에러수정" />
+    <MESSAGE value="expense추가" />
+    <MESSAGE value="브랜치 따기전 임시저장" />
+    <MESSAGE value="expense add" />
+    <MESSAGE value="file Exam" />
+    <MESSAGE value="error solve" />
+    <MESSAGE value="update expense-insert" />
+    <MESSAGE value="gradle, yml 세팅" />
+    <MESSAGE value="테스트 코드 삭제" />
+    <MESSAGE value="깃 이그노어 추가" />
+    <MESSAGE value="깃 서비스 추가" />
+    <MESSAGE value="공통 서비스 추가" />
+    <MESSAGE value="gradle 프로젝트로 전체 변경" />
+    <MESSAGE value="Switch project structure from Maven to Gradle&#10;&#10;Deleted Maven configuration files, including .classpath, .project, and pom.xml. Updated JSP to include headers and a simpler pagination structure. Renamed an API endpoint for better clarity." />
+    <MESSAGE value="프로젝트 설정 변화" />
+    <MESSAGE value="메소드명 변경 작업" />
+    <MESSAGE value="메소드명 변경 작업(한글 -&gt; 영문)" />
+    <option name="LAST_COMMIT_MESSAGE" value="메소드명 변경 작업(한글 -&gt; 영문)" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="org.hibernate.PropertyValueException" package="org.hibernate" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/cosblog/repository/service/TripService.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/com/cosblog/repository/service/TripService.java</url>
+          <line>26</line>
+          <properties class="com.cosblog.repository.service.TripService" method="insertTrip" />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
